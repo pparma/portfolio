@@ -10,6 +10,8 @@ import { FeatherInstagram } from "@subframe/core";
 import { FeatherLinkedin } from "@subframe/core";
 import { FeatherSend } from "@subframe/core";
 import Link from "next/link";
+import CopyEmail from "@/src/components/CopyEmail";
+
 
 function Works() {
   return (
@@ -72,7 +74,7 @@ function Works() {
           </div>
           <div className="w-full items-start gap-12 px-2 py-2 grid grid-cols-2 mobile:flex-col mobile:flex-nowrap mobile:gap-12 mobile:grid mobile:grid-cols-1">
             {/* go to case_study_ */}
-            <Link href="/case_study_bh">
+            <Link href="/case-study-bh">
               <CaseStudyCard
                 image="https://res.cloudinary.com/subframe/image/upload/v1755615333/uploads/20526/pumv86xcpadow3apfydy.png"
                 title="Simplifying Operations for BridgeHaul"
@@ -87,7 +89,7 @@ function Works() {
             </Link>
             
             {/* this card should lead to case_study_docsnap */}
-            <Link href="/case_study_docsnap">
+            <Link href="/case-study-docsnap">
               <CaseStudyCard
                 image="https://res.cloudinary.com/subframe/image/upload/v1755615333/uploads/20526/pumv86xcpadow3apfydy.png"
                 title="Clarity and control over legal obligations powered by Al."
@@ -102,7 +104,7 @@ function Works() {
             </Link>
             
             {/* go to case_study_yappa */}
-            <Link href="/case_study_yappa">
+            <Link href="/case-study-yappa">
               <CaseStudyCard
               image="https://res.cloudinary.com/subframe/image/upload/v1755615333/uploads/20526/pumv86xcpadow3apfydy.png"
               title="Rating Discussions through Voice & Video UX"
@@ -116,7 +118,7 @@ function Works() {
             />
             </Link>
             {/* this card should lead to case_study_crypto */}
-            <Link href="/case_study_crypto">
+            <Link href="/case-study-crypto">
               <CaseStudyCard
               image="https://res.cloudinary.com/subframe/image/upload/v1755615333/uploads/20526/pumv86xcpadow3apfydy.png"
               title="Bitcoin Exchange and Cryptocurrency Exchange"
@@ -156,20 +158,25 @@ function Works() {
           socialText="Find me on"
           socialLinks={
             <>
-              <FeatherLinkedin className="text-body font-body text-default-font" />
-              <span className="text-body font-body text-default-font">
+               <FeatherLinkedin className="text-body font-body text-default-font" />
+               <Link href="https://www.linkedin.com/in/pabloparma/" target="_blank" rel="noopener noreferrer">
+               <span className="text-body font-body text-default-font">
                 LinkedIn
-              </span>
+                </span>
+                </Link>
+              
               <div className="flex w-px flex-none flex-col items-center gap-2 self-stretch bg-neutral-border" />
               <FeatherInstagram className="text-body font-body text-default-font" />
+              <Link href="https://www.instagram.com/pabloparma/" target="_blank" rel="noopener noreferrer">
               <span className="text-body font-body text-default-font">
                 Instagram
               </span>
+              </Link>
               <div className="flex w-px flex-none flex-col items-center gap-2 self-stretch bg-neutral-border" />
               <FeatherSend className="text-body font-body text-default-font" />
-              <span className="text-body font-body text-default-font">
-                Send me an Email
-              </span>
+              
+              <CopyEmail />
+              
             </>
           }
           copyright="© 2525 Pablo Parma"
