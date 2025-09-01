@@ -131,13 +131,14 @@ function About() {
                   className="w-full flex-none rounded-md"
                   src="https://res.cloudinary.com/subframe/image/upload/v1756173703/uploads/20526/sxr7xgxk2u2vdlsvxps2.jpg"
                 />
-                <img
+                <video
                   className="w-full flex-none rounded-md"
-                  src="https://res.cloudinary.com/subframe/image/upload/v1756178229/uploads/20526/thzrykbkdarteddmafoz.jpg"
-                />
-                <img
-                  className="w-full flex-none rounded-md"
-                  src="https://res.cloudinary.com/subframe/image/upload/v1756180179/uploads/20526/smxmph45zagrbetdlh5d.jpg"
+                  src="/Recording 2024-05-04 184348.mp4"
+                  autoPlay
+                  loop
+                  muted
+                  playsInline
+                  preload="metadata"
                 />
               </div>
             </div>
@@ -146,7 +147,7 @@ function About() {
                     <div className="flex w-full max-w-[576px] flex-col items-start gap-1 py-4 mobile:flex-col mobile:flex-nowrap mobile:gap-4 mobile:px-0 mobile:py-12">
                 <img
                   className="hidden w-48 flex-none rounded-md mobile:block"
-                  src="https://images.unsplash.com/photo-1516321497487-e288fb19713f?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1470&q=80"
+                  src="https://res.cloudinary.com/subframe/image/upload/v1756178229/uploads/20526/thzrykbkdarteddmafoz.jpg"
                 />
                 <span className="text-heading-1 font-heading-1 text-brand-primary">
                   What sets me apart?
@@ -163,7 +164,7 @@ function About() {
                   <div className="flex w-full max-w-[576px] flex-col items-start gap-1 py-4 mobile:flex-col mobile:flex-nowrap mobile:gap-4 mobile:px-0 mobile:py-12">
                 <img
                   className="hidden max-h-[288px] w-48 flex-none rounded-md mobile:block"
-                  src="https://images.unsplash.com/photo-1529400971008-f566de0db4b0?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1470&q=80"
+                  src="https://res.cloudinary.com/subframe/image/upload/v1756178574/uploads/20526/qxsrv8qsvhvl1zhocrdi.png"
                 />
                 <span className="text-heading-1 font-heading-1 text-brand-primary">
                   I&#39;m resourceful
@@ -177,9 +178,14 @@ function About() {
               </FadeInSection>
               <FadeInSection>
                   <div className="flex w-full max-w-[576px] flex-col items-start gap-1 py-4 mobile:flex-col mobile:flex-nowrap mobile:gap-4 mobile:px-0 mobile:py-12">
-                <img
-                  className="hidden max-h-[288px] w-48 flex-none rounded-md mobile:block"
-                  src="https://images.unsplash.com/photo-1488590528505-98684fc5ff46?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1470&q=80"
+                <video
+                  className="w-full flex-none rounded-md"
+                  src="/Recording 2024-05-04 184348.mp4"
+                  autoPlay
+                  loop
+                  muted
+                  playsInline
+                  preload="metadata"
                 />
                 <span className="text-heading-1 font-heading-1 text-brand-primary">
                   I&#39;m eager to experiment
@@ -195,7 +201,7 @@ function About() {
                   <div className="flex w-full max-w-[576px] flex-col items-start gap-1 py-4 mobile:flex-col mobile:flex-nowrap mobile:gap-4 mobile:px-0 mobile:py-12">
                 <img
                   className="hidden max-h-[288px] w-48 flex-none rounded-md mobile:block"
-                  src="https://images.unsplash.com/photo-1531346878377-a5be20888e57?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1470&q=80"
+                  src="https://res.cloudinary.com/subframe/image/upload/v1756736102/uploads/20526/thltoellxo4igbopwgee.jpg"
                 />
                 <span className="text-heading-1 font-heading-1 text-brand-primary">
                   I&#39;m always learning
@@ -210,8 +216,8 @@ function About() {
               <FadeInSection>
                   <div className="flex w-full max-w-[576px] flex-col items-start gap-1 py-4 mobile:flex-col mobile:flex-nowrap mobile:gap-4 mobile:px-0 mobile:py-12">
                 <img
-                  className="hidden w-48 flex-none rounded-md mobile:block"
-                  src="https://images.unsplash.com/photo-1499728845408-cc0cdc4d0d57?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1470&q=80"
+                  className="hidden w-48 flex-none rounded-md mobile:block mobile:h-auto mobile:w-full"
+                  src="https://res.cloudinary.com/subframe/image/upload/v1756180179/uploads/20526/smxmph45zagrbetdlh5d.jpg"
                 />
                 <span className="text-heading-1 font-heading-1 text-brand-primary">
                   I&#39;m empathetic
