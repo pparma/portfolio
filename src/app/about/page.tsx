@@ -117,11 +117,7 @@ function About() {
               <div className="flex max-w-[288px] grow shrink-0 basis-0 flex-col items-start gap-2 pt-12">
                 <img
                   className="w-full flex-none rounded-md"
-                  src="https://res.cloudinary.com/subframe/image/upload/v1756173618/uploads/20526/giykhbrcvevi1fnttdi6.jpg"
-                />
-                <img
-                  className="w-full flex-none rounded-md"
-                  src="https://res.cloudinary.com/subframe/image/upload/v1756174265/uploads/20526/sjukxo8taigev9wnicad.jpg"
+  src="https://res.cloudinary.com/subframe/image/upload/v1756180179/uploads/20526/smxmph45zagrbetdlh5d.jpg"
                 />
                 <img
                   className="w-full flex-none rounded-md"
@@ -129,7 +125,7 @@ function About() {
                 />
                 <img
                   className="w-full flex-none rounded-md"
-                  src="https://res.cloudinary.com/subframe/image/upload/v1756173703/uploads/20526/sxr7xgxk2u2vdlsvxps2.jpg"
+                  src="https://res.cloudinary.com/subframe/image/upload/v1756174265/uploads/20526/sjukxo8taigev9wnicad.jpg"
                 />
                 <video
                   className="w-full flex-none rounded-md"
@@ -140,6 +136,14 @@ function About() {
                   playsInline
                   preload="metadata"
                 />
+                
+                <img
+                  className="w-full flex-none rounded-md"
+                  src="https://res.cloudinary.com/subframe/image/upload/v1756736102/uploads/20526/thltoellxo4igbopwgee.jpg"
+                />
+                
+                
+                
               </div>
             </div>
             <div className="flex grow shrink-0 basis-0 flex-col items-center justify-between self-stretch py-32 overflow-y-none">
@@ -179,7 +183,7 @@ function About() {
               <FadeInSection>
                   <div className="flex w-full max-w-[576px] flex-col items-start gap-1 py-4 mobile:flex-col mobile:flex-nowrap mobile:gap-4 mobile:px-0 mobile:py-12">
                 <video
-                  className="w-full flex-none rounded-md"
+                  className="hidden w-full flex-none rounded-md mobile:block"
                   src="/Recording 2024-05-04 184348.mp4"
                   autoPlay
                   loop
