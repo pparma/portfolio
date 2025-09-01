@@ -101,7 +101,7 @@ function Case_Study_Bh() {
                 </span>
                 <span className="text-heading-1 font-heading-1 text-default-font">
                   Delivered cutting-edge UI/UX design and a solid mobile
-                  architecture in just three months.
+                  architecture in just four months.
                 </span>
               </div>
               <div className="flex w-full flex-wrap items-start gap-4">
