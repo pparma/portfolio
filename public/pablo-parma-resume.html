@@ -1,0 +1,330 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Pablo Parma — Product Designer</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif;
+      font-size: 12.5px;
+      line-height: 1.5;
+      color: #1a1a1a;
+      background: #fff;
+      max-width: 820px;
+      margin: 36px auto;
+      padding: 0 30px;
+    }
+
+    /* ── Header ── */
+    header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      padding-bottom: 16px;
+      border-bottom: 1.5px solid #e5e5e5;
+      margin-bottom: 20px;
+    }
+
+    header h1 {
+      font-size: 24px;
+      font-weight: 700;
+      letter-spacing: -0.5px;
+      color: #111;
+    }
+
+    header p.title {
+      font-size: 12.5px;
+      color: #555;
+      margin-top: 2px;
+    }
+
+    .contact {
+      text-align: right;
+      font-size: 11.5px;
+      color: #555;
+      line-height: 1.65;
+    }
+
+    .contact a { color: #555; text-decoration: none; }
+
+    /* ── Section ── */
+    section { margin-bottom: 18px; }
+
+    section h2 {
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 1.2px;
+      text-transform: uppercase;
+      color: #888;
+      margin-bottom: 8px;
+    }
+
+    /* ── Summary ── */
+    .summary p { color: #333; max-width: 700px; }
+
+    /* ── Skills ── */
+    .skills-grid { display: flex; flex-wrap: wrap; gap: 6px; }
+
+    .skill {
+      background: #f4f4f4;
+      border-radius: 4px;
+      padding: 3px 9px;
+      font-size: 11px;
+      color: #333;
+    }
+
+    /* ── Experience ── */
+    .job {
+      display: grid;
+      grid-template-columns: 1fr auto;
+      gap: 0 14px;
+      margin-bottom: 13px;
+    }
+
+    .job:last-child { margin-bottom: 0; }
+
+    .job-company {
+      font-size: 10.5px;
+      font-weight: 600;
+      color: #888;
+      text-transform: uppercase;
+      letter-spacing: 0.4px;
+    }
+
+    .job-date {
+      font-size: 10.5px;
+      color: #999;
+      white-space: nowrap;
+      text-align: right;
+    }
+
+    .job-title {
+      font-size: 13px;
+      font-weight: 700;
+      color: #111;
+      grid-column: 1 / -1;
+      margin: 2px 0 5px;
+    }
+
+    .job ul {
+      grid-column: 1 / -1;
+      padding-left: 15px;
+      color: #444;
+    }
+
+    .job ul li { margin-bottom: 2.5px; }
+
+    /* ── Education ── */
+    .edu-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 8px;
+    }
+
+    .edu-item {
+      background: #f9f9f9;
+      border-radius: 6px;
+      padding: 9px 11px;
+    }
+
+    .edu-item h3 { font-size: 12px; font-weight: 700; color: #111; }
+    .edu-item p.school { font-size: 11px; color: #555; margin-top: 2px; }
+    .edu-item p.year { font-size: 10.5px; color: #999; margin-top: 2px; }
+
+    /* ── Languages ── */
+    .lang-row { display: flex; gap: 8px; }
+
+    /* ── Divider ── */
+    hr {
+      border: none;
+      border-top: 1px solid #ececec;
+      margin: 3px 0 11px;
+    }
+
+    /* ── Print ── */
+    @media print {
+      body { margin: 0; padding: 0; }
+      @page { size: A4; margin: 12mm 16mm; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- HEADER -->
+  <header>
+    <div>
+      <h1>Pablo Parma</h1>
+      <p class="title">Product Designer &nbsp;·&nbsp; UI/UX Specialist</p>
+    </div>
+    <div class="contact">
+      <span>Rosario, Santa Fe, Argentina</span><br />
+      <a href="mailto:pabloparma@gmail.com">pabloparma@gmail.com</a><br />
+      <a href="https://www.linkedin.com/in/pabloparma/" target="_blank">linkedin.com/in/pabloparma</a><br />
+      <a href="https://pparma.vercel.app" target="_blank">pparma.vercel.app</a>
+    </div>
+  </header>
+
+  <!-- SUMMARY -->
+  <section class="summary">
+    <h2>Professional Summary</h2>
+    <hr />
+    <p>
+      Product Designer with 10+ years of experience delivering user-centered digital experiences across mobile, web, and AI-powered platforms. Skilled in UX research, design systems, and front-end implementation with React, Tailwind, and Shadcn. Experienced working in Agile squads alongside engineers, product managers, and business stakeholders. Passionate about solving complex problems through clean, scalable design that drives engagement and measurable business results.
+    </p>
+  </section>
+
+  <!-- SKILLS -->
+  <section>
+    <h2>Skills</h2>
+    <hr />
+    <div class="skills-grid">
+      <span class="skill">Figma</span>
+      <span class="skill">Adobe CC</span>
+      <span class="skill">Design Systems</span>
+      <span class="skill">User Research</span>
+      <span class="skill">Prototyping</span>
+      <span class="skill">AI UX Patterns</span>
+      <span class="skill">HTML / CSS</span>
+      <span class="skill">Tailwind CSS</span>
+      <span class="skill">React</span>
+      <span class="skill">Agile / Lean UX</span>
+      <span class="skill">XR / AR / VR</span>
+      <span class="skill">SEO</span>
+      <span class="skill">Digital Marketing</span>
+    </div>
+  </section>
+
+  <!-- EXPERIENCE -->
+  <section>
+    <h2>Experience</h2>
+    <hr />
+
+    <div class="job">
+      <span class="job-company">Concord — Client: Sallybeauty.com</span>
+      <span class="job-date">Mar 2025 – Present</span>
+      <span class="job-title">Senior Product Designer</span>
+      <ul>
+        <li>Designed the current Sally Beauty app experience and CosmoProf app experience end-to-end.</li>
+        <li>Contributed to the design system and provided implementation guidance across teams.</li>
+        <li>Defined user flows and pixel-perfect layouts; currently building AI-powered prototypes for user testing.</li>
+      </ul>
+    </div>
+
+    <div class="job">
+      <span class="job-company">Nimble.la</span>
+      <span class="job-date">Jan 2023 – Jan 2025</span>
+      <span class="job-title">Senior Product Designer</span>
+      <ul>
+        <li>Led design for DocSnap.ai, an AI-powered contract-insights tool — improved onboarding flow and overall usability.</li>
+        <li>Redesigned BridgeHaul's logistics mobile app, streamlining freight workflows and increasing user engagement by <strong>30%</strong>.</li>
+        <li>Built a scalable Figma design system aligned with React, Tailwind, and Shadcn, enabling consistency across teams.</li>
+      </ul>
+    </div>
+
+    <div class="job">
+      <span class="job-company">Google C+E Studio (via Blink)</span>
+      <span class="job-date">Oct 2021 – Dec 2022</span>
+      <span class="job-title">Senior Product Designer</span>
+      <ul>
+        <li>Designed interactive AI-based creative tools — including Smart Stickers — used by millions of content creators worldwide.</li>
+        <li>Partnered with AI engineers and product managers to translate ML capabilities into intuitive user experiences.</li>
+      </ul>
+    </div>
+
+    <div class="job">
+      <span class="job-company">Yappa World Inc.</span>
+      <span class="job-date">Apr 2020 – Aug 2021</span>
+      <span class="job-title">Lead UI/UX Designer</span>
+      <ul>
+        <li>Facilitated UX workshops and created personas and journey maps, improving feature direction and cross-team alignment.</li>
+        <li>Designed a modular design system for audio/video social widgets, deployed across thousands of communities.</li>
+      </ul>
+    </div>
+
+    <div class="job">
+      <span class="job-company">Fulcrum / Redstage</span>
+      <span class="job-date">Jun 2019 – Apr 2020</span>
+      <span class="job-title">Product Designer</span>
+      <ul>
+        <li>Designed UX across healthcare, banking, and food-service verticals, including "Culinary Suite" restaurant management platform.</li>
+        <li>Integrated Lean UX into Agile teams, reducing design-to-development handoff cycle time.</li>
+      </ul>
+    </div>
+
+    <div class="job">
+      <span class="job-company">OZ Digital Consulting</span>
+      <span class="job-date">Nov 2018 – May 2019</span>
+      <span class="job-title">UI/UX Designer – XR</span>
+      <ul>
+        <li>Led spatial UI design for mixed-reality products on Magic Leap and Oculus, aligning UX with hardware and technical constraints.</li>
+      </ul>
+    </div>
+
+    <div class="job">
+      <span class="job-company">BairesDev</span>
+      <span class="job-date">Jun 2017 – Nov 2018</span>
+      <span class="job-title">UI/UX Designer</span>
+      <ul>
+        <li>Designed dashboards and complex data visualizations for enterprise clients, improving decision-making workflows.</li>
+        <li>Ensured design consistency and usability across multiple large-scale digital platforms.</li>
+      </ul>
+    </div>
+
+    <div class="job">
+      <span class="job-company">Wrap Media</span>
+      <span class="job-date">Jul 2016 – May 2017</span>
+      <span class="job-title">UI/UX Designer</span>
+      <ul>
+        <li>Produced brand-compliant campaigns and high-fidelity prototypes; improved conversion and engagement under tight deadlines.</li>
+      </ul>
+    </div>
+
+    <div class="job">
+      <span class="job-company">G2K Argentina S.A.</span>
+      <span class="job-date">Mar 2013 – Mar 2016</span>
+      <span class="job-title">UI/UX Designer</span>
+      <ul>
+        <li>Managed branding, UI/UX, and web design for large B2C projects; led team that grew conversions by <strong>25%</strong> via SEO and responsive design.</li>
+        <li>Created visual systems, custom photography, and iconography to unify product identity.</li>
+      </ul>
+    </div>
+  </section>
+
+  <!-- EDUCATION -->
+  <section>
+    <h2>Education</h2>
+    <hr />
+    <div class="edu-grid">
+      <div class="edu-item">
+        <h3>Degree in Graphic Design</h3>
+        <p class="school">Escuela de Bellas Artes</p>
+        <p class="year">2002 – 2004</p>
+      </div>
+      <div class="edu-item">
+        <h3>Postgraduate in Visual Communication</h3>
+        <p class="school">Facultad de Planeamiento y Diseño</p>
+        <p class="year">2005 – 2007</p>
+      </div>
+      <div class="edu-item">
+        <h3>Visual Communication</h3>
+        <p class="school">UNR – Universidad Nacional de Rosario</p>
+        <p class="year">2010 – present</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- LANGUAGES -->
+  <section>
+    <h2>Languages</h2>
+    <hr />
+    <div class="lang-row">
+      <span class="skill">Spanish — Native</span>
+      <span class="skill">English — Advanced</span>
+    </div>
+  </section>
+
+</body>
+</html>

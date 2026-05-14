@@ -2,6 +2,7 @@
 
 import React from "react";
 import { Badge } from "@/ui/components/Badge";
+import { Button } from "@/ui/components/Button";
 import { Footer } from "@/ui/components/Footer";
 import { IconWithBackground } from "@/ui/components/IconWithBackground";
 import { LinkButton } from "@/ui/components/LinkButton";
@@ -98,6 +99,11 @@ function Cv() {
                   <Badge variant="neutral">English (Advanced)</Badge>
                 </div>
               </div>
+              <a href="/pablo-parma-resume.pdf" download>
+                <Button variant="brand-primary" className="w-full">
+                  Download CV
+                </Button>
+              </a>
             </div>
             <div className="flex max-w-[1024px] grow shrink-0 basis-0 flex-col items-start gap-12">
               <div className="flex w-full flex-col items-start gap-4">
@@ -133,6 +139,57 @@ function Cv() {
                   EXPERIENCE
                 </span>
                 <div className="flex w-full flex-col items-start gap-6">
+                  <div className="flex w-full flex-col items-start gap-2 rounded-md bg-neutral-50 px-6 py-6">
+                    <div className="flex w-full items-start justify-between">
+                      <span className="text-monospace-body font-monospace-body text-subtext-color">
+                        Concord — Client: Sallybeauty.com
+                      </span>
+                      <span className="text-monospace-body font-monospace-body text-subtext-color">
+                        Mar 2025 – Present
+                      </span>
+                    </div>
+                    <span className="text-body-bold font-body-bold text-default-font">
+                      Senior Product Designer
+                    </span>
+                    <div className="flex w-full flex-col items-start">
+                      <div className="flex w-full items-start gap-3 pr-4 py-2">
+                        <IconWithBackground
+                          className="h-5 w-4 flex-none"
+                          variant="success"
+                        />
+                        <span className="grow shrink-0 basis-0 whitespace-pre-wrap text-body font-body text-default-font">
+                          Designed the current Sally Beauty app experience and CosmoProf app experience end-to-end.
+                        </span>
+                      </div>
+                      <div className="flex w-full items-start gap-3 pr-4 py-2">
+                        <IconWithBackground
+                          className="h-5 w-4 flex-none"
+                          variant="success"
+                        />
+                        <span className="grow shrink-0 basis-0 text-body font-body text-default-font">
+                          Contributed to the design system and provided guidance for implementation across teams.
+                        </span>
+                      </div>
+                      <div className="flex w-full items-start gap-3 pr-4 py-2">
+                        <IconWithBackground
+                          className="h-5 w-4 flex-none"
+                          variant="success"
+                        />
+                        <span className="grow shrink-0 basis-0 text-body font-body text-default-font">
+                          Defined user flows and delivered pixel-perfect layouts for development handoff.
+                        </span>
+                      </div>
+                      <div className="flex w-full items-start gap-3 pr-4 py-2">
+                        <IconWithBackground
+                          className="h-5 w-4 flex-none"
+                          variant="success"
+                        />
+                        <span className="grow shrink-0 basis-0 text-body font-body text-default-font">
+                          Currently building AI-powered prototypes for user testing and research validation.
+                        </span>
+                      </div>
+                    </div>
+                  </div>
                   <div className="flex w-full flex-col items-start gap-2 rounded-md bg-neutral-50 px-6 py-6">
                     <div className="flex w-full items-start justify-between">
                       <span className="text-monospace-body font-monospace-body text-subtext-color">
