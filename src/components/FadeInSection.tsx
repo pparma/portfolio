@@ -1,34 +1,33 @@
-import React, { useRef, useEffect, useState } from "react";
+"use client";
 
-const FadeInSection: React.FC<{ children: React.ReactNode }> = ({ children }) => {
-  const ref = useRef<HTMLDivElement | null>(null);
-  const [isVisible, setIsVisible] = useState(false);
+import { useRef } from "react";
+import { motion, useInView } from "framer-motion";
 
-  useEffect(() => {
-    const observer = new IntersectionObserver(
-      ([entry]) => {
-        if (entry.isIntersecting) {
-          setIsVisible(true);
-          observer.disconnect(); // trigger only once
-        }
-      },
-      { threshold: 0.1 }
-    );
+interface FadeInSectionProps {
+  children: React.ReactNode;
+  delay?: number;
+  className?: string;
+}
 
-    if (ref.current) observer.observe(ref.current);
-
-    return () => observer.disconnect();
-  }, []);
+const FadeInSection = ({ children, delay = 0, className }: FadeInSectionProps) => {
+  const ref = useRef(null);
+  const isInView = useInView(ref, { once: true, margin: "-80px" });
 
   return (
-    <div
+    <motion.div
       ref={ref}
-      className={`transition-all duration-700 ease-out transform ${
-        isVisible ? "animate-fade-in-up delay-100" : "opacity-0 translate-y-5"
-      }`}
+      initial={{ opacity: 0, y: 40 }}
+      animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 40 }}
+      transition={{
+        type: "spring",
+        stiffness: 60,
+        damping: 20,
+        delay,
+      }}
+      className={className}
     >
       {children}
-    </div>
+    </motion.div>
   );
 };
 
