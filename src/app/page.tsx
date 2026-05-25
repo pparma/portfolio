@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useRef, useEffect } from "react";
+import React, { useRef, useEffect, useState } from "react";
 import { CaseStudyCard } from "@/ui/components/CaseStudyCard";
 import { Footer } from "@/ui/components/Footer";
 import { LinkButton } from "@/ui/components/LinkButton";
@@ -13,22 +13,65 @@ import { motion, useInView, useScroll, useTransform } from "framer-motion";
 
 /* ─── Scroll-scrubbed video hero ─────────────────────────────────────────── */
 
+// Tunable constants — adjust in future iterations
+const LOADER_BAR_HEIGHT = "2px";       // bar thickness
+const LOADER_BAR_COLOR = "rgba(255,255,255,0.55)"; // bar fill color
+const SCRUB_THRESHOLD = 0.033;         // min time diff (s) before seeking (~30fps)
+
 function ScrollVideoHero() {
   const containerRef = useRef<HTMLDivElement>(null);
   const videoRef = useRef<HTMLVideoElement>(null);
-
-  const { scrollYProgress } = useScroll({
-    target: containerRef,
-    offset: ["start start", "end end"],
-  });
+  const [loadProgress, setLoadProgress] = useState(0); // 0–1
+  const [videoReady, setVideoReady] = useState(false);
 
   useEffect(() => {
-    return scrollYProgress.on("change", (progress) => {
-      const video = videoRef.current;
-      if (!video || !video.duration) return;
-      video.currentTime = video.duration * progress;
-    });
-  }, [scrollYProgress]);
+    const video = videoRef.current;
+    const container = containerRef.current;
+    if (!video || !container) return;
+
+    // Force load — iOS ignores preload="auto" without this
+    video.load();
+
+    const onProgress = () => {
+      if (video.buffered.length > 0 && video.duration) {
+        setLoadProgress(video.buffered.end(video.buffered.length - 1) / video.duration);
+      }
+    };
+    const onCanPlay = () => { setVideoReady(true); setLoadProgress(1); };
+
+    video.addEventListener("progress", onProgress);
+    video.addEventListener("loadedmetadata", onProgress);
+    video.addEventListener("canplaythrough", onCanPlay);
+
+    // RAF loop — reads scrollY directly each frame, bypasses iOS touch-scroll batching
+    let rafId: number;
+    let lastScrollY = -1;
+
+    const tick = () => {
+      const sy = window.scrollY;
+      if (sy !== lastScrollY && video.duration) {
+        lastScrollY = sy;
+        const rect = container.getBoundingClientRect();
+        const scrollable = container.offsetHeight - window.innerHeight;
+        if (scrollable > 0) {
+          const progress = Math.max(0, Math.min(1, -rect.top / scrollable));
+          const target = video.duration * progress;
+          if (Math.abs(video.currentTime - target) > SCRUB_THRESHOLD) {
+            video.currentTime = target;
+          }
+        }
+      }
+      rafId = requestAnimationFrame(tick);
+    };
+    rafId = requestAnimationFrame(tick);
+
+    return () => {
+      cancelAnimationFrame(rafId);
+      video.removeEventListener("progress", onProgress);
+      video.removeEventListener("loadedmetadata", onProgress);
+      video.removeEventListener("canplaythrough", onCanPlay);
+    };
+  }, []);
 
   return (
     <div ref={containerRef} className="relative w-full" style={{ height: "250vh" }}>
@@ -42,6 +85,21 @@ function ScrollVideoHero() {
           preload="auto"
           className="h-full w-full object-cover"
         />
+
+        {/* Loader bar — fades out when video is buffered */}
+        <motion.div
+          className="absolute bottom-0 left-0 w-full overflow-hidden"
+          style={{ height: LOADER_BAR_HEIGHT }}
+          animate={{ opacity: videoReady ? 0 : 1 }}
+          transition={{ duration: 0.6, ease: "easeOut", delay: videoReady ? 0.2 : 0 }}
+        >
+          <motion.div
+            className="h-full w-full origin-left"
+            style={{ backgroundColor: LOADER_BAR_COLOR }}
+            animate={{ scaleX: loadProgress }}
+            transition={{ ease: "linear", duration: 0.25 }}
+          />
+        </motion.div>
       </div>
     </div>
   );
