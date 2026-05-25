@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useRef } from "react";
+import React, { useRef, useEffect } from "react";
 import { CaseStudyCard } from "@/ui/components/CaseStudyCard";
 import { Footer } from "@/ui/components/Footer";
 import { LinkButton } from "@/ui/components/LinkButton";
@@ -9,7 +9,43 @@ import { Button } from "@/ui/components/Button";
 import { FeatherArrowRight, FeatherInstagram, FeatherLinkedin, FeatherSend } from "@subframe/core";
 import Link from "next/link";
 import CopyEmail from "@/src/components/CopyEmail";
-import { motion, useInView } from "framer-motion";
+import { motion, useInView, useScroll, useTransform } from "framer-motion";
+
+/* ─── Scroll-scrubbed video hero ─────────────────────────────────────────── */
+
+function ScrollVideoHero() {
+  const containerRef = useRef<HTMLDivElement>(null);
+  const videoRef = useRef<HTMLVideoElement>(null);
+
+  const { scrollYProgress } = useScroll({
+    target: containerRef,
+    offset: ["start start", "end end"],
+  });
+
+  useEffect(() => {
+    return scrollYProgress.on("change", (progress) => {
+      const video = videoRef.current;
+      if (!video || !video.duration) return;
+      video.currentTime = video.duration * progress;
+    });
+  }, [scrollYProgress]);
+
+  return (
+    <div ref={containerRef} className="relative w-full" style={{ height: "250vh" }}>
+      <div className="sticky top-0 h-screen w-full overflow-hidden">
+        <video
+          ref={videoRef}
+          src="/vid/bganim-scrub.mp4"
+          poster="/vid/poster.jpg"
+          muted
+          playsInline
+          preload="auto"
+          className="h-full w-full object-cover"
+        />
+      </div>
+    </div>
+  );
+}
 
 /* ─── Animated case study card ────────────────────────────────────────────── */
 
@@ -47,6 +83,18 @@ function AnimatedCard({
 /* ─── Page ────────────────────────────────────────────────────────────────── */
 
 function Index() {
+  const heroWrapperRef = useRef<HTMLDivElement>(null);
+  const heroRef = useRef<HTMLDivElement>(null);
+  const heroInView = useInView(heroRef, { once: true, amount: 0.25 });
+
+  const { scrollYProgress: heroScrollProgress } = useScroll({
+    target: heroWrapperRef,
+    offset: ["start end", "end start"],
+  });
+  // Becomes fully opaque by the time 25% of the wrapper has scrolled past —
+  // that maps to ~80% of the actual slide-in movement.
+  const heroBgOpacity = useTransform(heroScrollProgress, [0, 0.25], [0, 1]);
+
   return (
     <div className="flex h-full w-full flex-col items-center bg-default-background">
       <NavigationHeader
@@ -95,131 +143,185 @@ function Index() {
         }
       />
 
-      {/* ── Hero ── */}
-      <section className="container max-w-none flex w-full flex-col items-start gap-8 py-24 px-14 mobile:px-6 mobile:py-16">
-        <motion.p
-          className="text-caption font-caption text-subtext-color"
-          initial={{ opacity: 0, y: 10 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.5, ease: "easeOut" }}
-        >
-          Product Designer · Rosario, Argentina · Open to remote
-        </motion.p>
+      {/* ── Scroll video ── */}
+      <ScrollVideoHero />
 
-        <div className="overflow-hidden">
-          <motion.h1
-            className="text-heading-1 font-heading-1 text-default-font max-w-[720px]"
-            style={{ textWrap: "balance" } as React.CSSProperties}
-            initial={{ y: "100%" }}
-            animate={{ y: "0%" }}
-            transition={{ type: "spring" as const, stiffness: 55, damping: 18, delay: 0.08 }}
-          >
-            Product Designer crafting clear, calm interfaces.
-          </motion.h1>
-        </div>
-
-        <motion.p
-          className="text-body-big font-body-big text-subtext-color max-w-[520px]"
-          style={{ textWrap: "pretty" } as React.CSSProperties}
-          initial={{ opacity: 0, y: 14 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ type: "spring" as const, stiffness: 55, damping: 20, delay: 0.2 }}
+      {/* ── Hero panel — pulls up 100dvh to overlay the video's last viewport ── */}
+      <div
+        ref={heroWrapperRef}
+        className="relative w-full"
+        style={{ marginTop: "-100dvh", height: "200dvh", zIndex: 20 }}
+      >
+        <div
+          ref={heroRef}
+          className="sticky top-0 flex flex-col justify-center"
+          style={{ minHeight: "100dvh" }}
         >
-          Senior UI/UX designer focused on systems, product thinking, and
-          delightful details. Currently open to remote opportunities.
-        </motion.p>
+          {/* scroll-driven background — transparent on entry, solid by 80% of slide-in */}
+          <motion.div
+            className="absolute inset-0 pointer-events-none"
+            style={{ backgroundColor: "rgb(249, 246, 241)", opacity: heroBgOpacity }}
+          />
 
-        <motion.div
-          className="flex items-center gap-6"
-          initial={{ opacity: 0, y: 12 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ type: "spring" as const, stiffness: 55, damping: 20, delay: 0.3 }}
-        >
-          <Link href="/works">
-            <motion.div
-              whileHover={{ scale: 1.03 }}
-              whileTap={{ scale: 0.97 }}
-              transition={{ type: "spring" as const, stiffness: 400, damping: 17 }}
+          <div className="relative max-w-7xl mx-auto w-full flex flex-col items-start gap-8 px-14 mobile:px-6">
+            <motion.p
+              className="text-caption font-caption text-subtext-color"
+              initial={{ opacity: 0, y: 10 }}
+              animate={heroInView ? { opacity: 1, y: 0 } : {}}
+              transition={{ duration: 0.5, ease: "easeOut" }}
             >
-              <Button iconRight={<FeatherArrowRight />}>Browse Work</Button>
+              Product Designer · Rosario, Argentina · Open to remote
+            </motion.p>
+
+            <div className="overflow-hidden">
+              <motion.h1
+                className="text-heading-1 font-heading-1 text-default-font max-w-[720px]"
+                style={{ textWrap: "balance" } as React.CSSProperties}
+                initial={{ y: "100%" }}
+                animate={heroInView ? { y: "0%" } : {}}
+                transition={{
+                  type: "spring" as const,
+                  stiffness: 55,
+                  damping: 18,
+                  delay: 0.08,
+                }}
+              >
+                Product Designer crafting clear, calm interfaces.
+              </motion.h1>
+            </div>
+
+            <motion.p
+              className="text-body-big font-body-big text-subtext-color max-w-[520px]"
+              style={{ textWrap: "pretty" } as React.CSSProperties}
+              initial={{ opacity: 0, y: 14 }}
+              animate={heroInView ? { opacity: 1, y: 0 } : {}}
+              transition={{
+                type: "spring" as const,
+                stiffness: 55,
+                damping: 20,
+                delay: 0.2,
+              }}
+            >
+              Senior UI/UX designer focused on systems, product thinking, and
+              delightful details. Currently open to remote opportunities.
+            </motion.p>
+
+            <motion.div
+              className="flex items-center gap-6"
+              initial={{ opacity: 0, y: 12 }}
+              animate={heroInView ? { opacity: 1, y: 0 } : {}}
+              transition={{
+                type: "spring" as const,
+                stiffness: 55,
+                damping: 20,
+                delay: 0.3,
+              }}
+            >
+              <Link href="/works">
+                <motion.div
+                  whileHover={{ scale: 1.03 }}
+                  whileTap={{ scale: 0.97 }}
+                  transition={{
+                    type: "spring" as const,
+                    stiffness: 400,
+                    damping: 17,
+                  }}
+                >
+                  <Button iconRight={<FeatherArrowRight />}>Browse Work</Button>
+                </motion.div>
+              </Link>
+              <motion.a
+                href="/about"
+                className="text-body font-body text-subtext-color underline-offset-4 hover:underline"
+                whileHover={{ x: 3 }}
+                transition={{ type: "spring" as const, stiffness: 400, damping: 17 }}
+              >
+                Get in touch
+              </motion.a>
             </motion.div>
-          </Link>
-          <motion.a
-            href="/about"
-            className="text-body font-body text-subtext-color underline-offset-4 hover:underline"
-            whileHover={{ x: 3 }}
-            transition={{ type: "spring" as const, stiffness: 400, damping: 17 }}
-          >
-            Get in touch
-          </motion.a>
-        </motion.div>
-      </section>
-
-      {/* ── Selected Work ── */}
-      <section className="container max-w-none flex w-full flex-col items-start gap-8 py-20 px-6">
-        <motion.span
-          className="text-headling-4 font-headling-4 text-default-font"
-          initial={{ opacity: 0, y: 16 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true, margin: "-40px" }}
-          transition={{ type: "spring" as const, stiffness: 80, damping: 20 }}
-        >
-          Selected Work
-        </motion.span>
-
-        <div className="w-full grid grid-cols-3 gap-6 mobile:grid-cols-1">
-          <AnimatedCard index={0}>
-            <Link href="/case-study-bh">
-              <CaseStudyCard
-                image="https://res.cloudinary.com/subframe/image/upload/v1755615333/uploads/20526/pumv86xcpadow3apfydy.png"
-                title="Simplifying Operations for BridgeHaul"
-                subtitle="Revolutionizing freight with a redesigned mobile app."
-                preview={
-                  <img
-                    className="flex-none transition-transform duration-300 hover:scale-110"
-                    src="https://res.cloudinary.com/subframe/image/upload/v1755615333/uploads/20526/pumv86xcpadow3apfydy.png"
-                    alt="BridgeHaul case study"
-                  />
-                }
-              />
-            </Link>
-          </AnimatedCard>
-
-          <AnimatedCard index={1}>
-            <Link href="/case-study-yappa">
-              <CaseStudyCard
-                image="https://res.cloudinary.com/subframe/image/upload/v1755615333/uploads/20526/pumv86xcpadow3apfydy.png"
-                title="Humanizing online rating discussions through Voice & Video UX"
-                subtitle="UX flows and a modular design system enabling publishers to embed social interaction on their platforms."
-                preview={
-                  <img
-                    className="flex-none transition-transform duration-300 hover:scale-110"
-                    src="https://res.cloudinary.com/subframe/image/upload/v1756048947/uploads/20526/yizdabjt8n9aute45cop.png"
-                    alt="Yappa case study"
-                  />
-                }
-              />
-            </Link>
-          </AnimatedCard>
-
-          <AnimatedCard index={2}>
-            <Link href="/case-study-docsnap">
-              <CaseStudyCard
-                image="https://res.cloudinary.com/subframe/image/upload/v1755615333/uploads/20526/pumv86xcpadow3apfydy.png"
-                title="AI-driven platform for legal management"
-                subtitle="A streamlined, user-friendly platform for intelligent document management."
-                preview={
-                  <img
-                    className="flex-none transition-transform duration-300 hover:scale-110"
-                    src="https://res.cloudinary.com/subframe/image/upload/v1755616223/uploads/20526/s4zctt7znm22wkvnu0oe.png"
-                    alt="Docsnap case study"
-                  />
-                }
-              />
-            </Link>
-          </AnimatedCard>
+          </div>
         </div>
-      </section>
+      </div>
+
+      {/* ── Selected Work — overlays hero, full viewport height ── */}
+      <div
+        className="relative w-full"
+        style={{ zIndex: 30, background: "rgb(249, 246, 241)" }}
+      >
+        <section
+          className="flex w-full flex-col items-start py-20 px-6"
+          style={{ minHeight: "100dvh" }}
+        >
+          <div className="max-w-7xl mx-auto w-full flex flex-col items-start gap-8">
+            <motion.span
+              className="text-headling-4 font-headling-4 text-default-font"
+              initial={{ opacity: 0, y: 16 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true, margin: "-40px" }}
+              transition={{
+                type: "spring" as const,
+                stiffness: 80,
+                damping: 20,
+              }}
+            >
+              Selected Work
+            </motion.span>
+
+            <div className="w-full grid grid-cols-3 gap-6 mobile:grid-cols-1">
+              <AnimatedCard index={0}>
+                <Link href="/case-study-bh">
+                  <CaseStudyCard
+                    image="https://res.cloudinary.com/subframe/image/upload/v1755615333/uploads/20526/pumv86xcpadow3apfydy.png"
+                    title="Simplifying Operations for BridgeHaul"
+                    subtitle="Revolutionizing freight with a redesigned mobile app."
+                    preview={
+                      <img
+                        className="flex-none transition-transform duration-300 hover:scale-110"
+                        src="https://res.cloudinary.com/subframe/image/upload/v1755615333/uploads/20526/pumv86xcpadow3apfydy.png"
+                        alt="BridgeHaul case study"
+                      />
+                    }
+                  />
+                </Link>
+              </AnimatedCard>
+
+              <AnimatedCard index={1}>
+                <Link href="/case-study-yappa">
+                  <CaseStudyCard
+                    image="https://res.cloudinary.com/subframe/image/upload/v1755615333/uploads/20526/pumv86xcpadow3apfydy.png"
+                    title="Humanizing online rating discussions through Voice & Video UX"
+                    subtitle="UX flows and a modular design system enabling publishers to embed social interaction on their platforms."
+                    preview={
+                      <img
+                        className="flex-none transition-transform duration-300 hover:scale-110"
+                        src="https://res.cloudinary.com/subframe/image/upload/v1756048947/uploads/20526/yizdabjt8n9aute45cop.png"
+                        alt="Yappa case study"
+                      />
+                    }
+                  />
+                </Link>
+              </AnimatedCard>
+
+              <AnimatedCard index={2}>
+                <Link href="/case-study-docsnap">
+                  <CaseStudyCard
+                    image="https://res.cloudinary.com/subframe/image/upload/v1755615333/uploads/20526/pumv86xcpadow3apfydy.png"
+                    title="AI-driven platform for legal management"
+                    subtitle="A streamlined, user-friendly platform for intelligent document management."
+                    preview={
+                      <img
+                        className="flex-none transition-transform duration-300 hover:scale-110"
+                        src="https://res.cloudinary.com/subframe/image/upload/v1755616223/uploads/20526/s4zctt7znm22wkvnu0oe.png"
+                        alt="Docsnap case study"
+                      />
+                    }
+                  />
+                </Link>
+              </AnimatedCard>
+            </div>
+          </div>
+        </section>
+      </div>
 
       {/* ── Footer ── */}
       <Footer
