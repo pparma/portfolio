@@ -278,14 +278,14 @@ function About() {
                 className="text-caption font-caption text-subtext-color"
                 style={{ textWrap: "pretty" } as React.CSSProperties}
               >
-                I'm a Product Designer with 10+ years of experience creating user-centered
+                I&apos;m a Product Designer with 10+ years of experience creating user-centered
                 digital experiences, proudly based in Argentina.
               </span>
               <span
                 className="text-caption-bold font-caption-bold text-default-font"
                 style={{ textWrap: "pretty" } as React.CSSProperties}
               >
-                Beyond design, I'm deeply passionate about photography — especially capturing
+                Beyond design, I&apos;m deeply passionate about photography — especially capturing
                 the landscapes and wildlife of my country. Patagonia is my constant source of
                 inspiration, and I often dream of one day calling it home.
               </span>
