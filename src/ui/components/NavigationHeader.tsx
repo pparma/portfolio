@@ -31,7 +31,7 @@ const NavigationHeaderRoot = React.forwardRef<
   return (
     <div
       className={SubframeUtils.twClassNames(
-        "flex w-full items-center gap-2 border-b border-solid border-neutral-border bg-default-background px-8 py-4 sticky top-0 bg-blend-screen backdrop-blur-xl bg-opacity-30",
+        "flex w-full items-center gap-2 border-b border-solid border-neutral-border bg-default-background px-8 mobile:px-4 py-4 sticky top-0 bg-blend-screen backdrop-blur-xl bg-opacity-30",
         className
       )}
       ref={ref}
