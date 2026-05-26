@@ -184,7 +184,7 @@ export default function ContactPage() {
                   fontWeight: 700,
                 }}
               >
-                LET'S WORK<br />TOGETHER
+                LET&apos;S WORK<br />TOGETHER
               </h1>
             </div>
 
@@ -193,8 +193,8 @@ export default function ContactPage() {
               style={{ lineHeight: 1.75, maxWidth: "340px" } as React.CSSProperties}
             >
               Have a project in mind, a question, or just want to say hi?
-              Fill in the form and I'll get back to you —{" "}
-              <span className="text-default-font">no worries, I'll reach out.</span>
+              Fill in the form and I&apos;ll get back to you —{" "}
+              <span className="text-default-font">no worries, I&apos;ll reach out.</span>
             </p>
 
             <div className="flex flex-col gap-2 pt-4">
@@ -231,8 +231,8 @@ export default function ContactPage() {
                       Message sent.
                     </span>
                     <p className="text-body-big font-body-big text-subtext-color" style={{ lineHeight: 1.75 }}>
-                      Thanks for reaching out. I'll get back to you as soon as I can —
-                      no worries, you'll hear from me.
+                      Thanks for reaching out. I&apos;ll get back to you as soon as I can —
+                      no worries, you&apos;ll hear from me.
                     </p>
                   </div>
                   <Link href="/">
