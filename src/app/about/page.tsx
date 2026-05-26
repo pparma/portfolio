@@ -99,23 +99,13 @@ function AboutSection({
 
 function About() {
   const imgContainerRef = useRef<HTMLDivElement>(null);
-  const heroWrapperRef  = useRef<HTMLDivElement>(null);
-  const heroRef         = useRef<HTMLDivElement>(null);
-  const heroInView      = useInView(heroRef, { once: true, amount: 0.15 });
 
   /* Parallax on the background image */
   const { scrollYProgress: imgProgress } = useScroll({
     target: imgContainerRef,
     offset: ["start start", "end start"],
   });
-  const imgY = useTransform(imgProgress, [0, 1], ["0%", "25%"]);
-
-  /* Scroll-driven background on the text panel — mirrors homepage pattern */
-  const { scrollYProgress: heroScrollProgress } = useScroll({
-    target: heroWrapperRef,
-    offset: ["start end", "end start"],
-  });
-  const heroBgOpacity = useTransform(heroScrollProgress, [0, 0.25], [0, 1]);
+  const imgY = useTransform(imgProgress, [0, 1], ["0%", "22%"]);
 
   return (
     <div className="flex h-full w-full flex-col items-center bg-default-background">
@@ -168,125 +158,128 @@ function About() {
         }
       />
 
-      {/* ── Full-bleed background image (200dvh = image stays visible during scroll-in) ── */}
+      {/* ── Hero — sticky image + frosted glass card ── */}
       <div
         ref={imgContainerRef}
         className="relative w-full"
-        style={{ height: "200dvh" }}
+        style={{ height: "160dvh" }}
       >
         <div className="sticky top-0 h-screen w-full overflow-hidden">
-          <motion.img
-            src="https://res.cloudinary.com/subframe/image/upload/v1756172560/uploads/20526/b3gp8ugog2wackvbix8e.jpg"
-            alt="Patagonia landscape, Argentina"
-            className="h-full w-full object-cover"
-            style={{ y: imgY, scale: 1.08, transformOrigin: "center top" }}
-            initial={{ opacity: 0, scale: 1.1 }}
-            animate={{ opacity: 1, scale: 1.08 }}
-            transition={{ duration: 1.3, ease: "easeOut" }}
-          />
-        </div>
-      </div>
 
-      {/* ── Hero text panel — pulls up 100dvh to overlay the image's last viewport ── */}
-      <div
-        ref={heroWrapperRef}
-        className="relative w-full"
-        style={{ marginTop: "-100dvh", height: "200dvh", zIndex: 20 }}
-      >
-        <div
-          ref={heroRef}
-          className="sticky top-0 flex flex-col justify-center"
-          style={{ minHeight: "100dvh" }}
-        >
-          {/* Scroll-driven background — transparent on entry, solid as it settles */}
+          {/* Background image — flipped horizontally for composition */}
           <motion.div
-            className="absolute inset-0 pointer-events-none"
-            style={{ backgroundColor: "rgb(249, 246, 241)", opacity: heroBgOpacity }}
-          />
+            className="absolute inset-0"
+            style={{ y: imgY }}
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ duration: 1.3, ease: "easeOut" }}
+          >
+            <img
+              src="https://res.cloudinary.com/subframe/image/upload/v1756172560/uploads/20526/b3gp8ugog2wackvbix8e.jpg"
+              alt="Patagonia landscape, Argentina"
+              className="w-full h-full object-cover"
+              style={{ transform: "scaleX(-1) scale(1.1)", transformOrigin: "center center" }}
+            />
+          </motion.div>
 
-          <div className="relative max-w-7xl mx-auto w-full flex flex-col items-start gap-8 px-14 mobile:px-6">
-
-            {/* Metadata */}
+          {/* Frosted glass card — left-aligned, vertically centred */}
+          <div className="absolute inset-0 flex items-center px-14 mobile:px-6">
             <motion.div
-              className="flex items-center gap-3 flex-wrap"
-              initial={{ opacity: 0, y: 10 }}
-              animate={heroInView ? { opacity: 1, y: 0 } : {}}
-              transition={{ duration: 0.5, ease: "easeOut" }}
+              className="flex flex-col gap-5 p-8 mobile:p-6"
+              style={{
+                backgroundColor: "rgba(249, 246, 241, 0.18)",
+                backdropFilter: "blur(28px)",
+                WebkitBackdropFilter: "blur(28px)",
+                border: "1px solid rgba(249, 246, 241, 0.35)",
+                borderRadius: "16px",
+                maxWidth: "480px",
+                width: "100%",
+              }}
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.8, ease: "easeOut", delay: 0.5 }}
             >
-              <span className="text-caption font-caption text-subtext-color uppercase tracking-widest">
-                Product Designer
-              </span>
-              <div className="w-px h-3 flex-none bg-neutral-border" />
-              <span className="text-caption font-caption text-subtext-color">
-                Rosario, Argentina
-              </span>
-              <div className="w-px h-3 flex-none bg-neutral-border" />
-              <span
-                className="text-caption font-caption"
-                style={{ color: "rgb(34, 197, 94)" }}
+              {/* Metadata */}
+              <motion.div
+                className="flex items-center gap-2 flex-wrap"
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                transition={{ delay: 0.75, duration: 0.4 }}
               >
-                ● Available
-              </span>
-            </motion.div>
+                <span className="text-caption font-caption text-subtext-color uppercase tracking-widest">
+                  Product Designer
+                </span>
+                <div className="w-px h-3 flex-none bg-neutral-border" />
+                <span className="text-caption font-caption text-subtext-color">
+                  Rosario, Argentina
+                </span>
+                <div className="w-px h-3 flex-none bg-neutral-border" />
+                <span className="text-caption font-caption" style={{ color: "rgb(34, 197, 94)" }}>
+                  ● Available
+                </span>
+              </motion.div>
 
-            {/* Name — clip-path slide up */}
-            {["PABLO", "PARMA"].map((word, i) => (
-              <div key={word} className="overflow-hidden" style={{ marginTop: i === 0 ? 0 : "-0.1em" }}>
-                <motion.h1
-                  className="font-heading-1 text-default-font leading-none select-none"
-                  style={{
-                    fontSize: "clamp(72px, 9.5vw, 136px)",
-                    letterSpacing: "-0.035em",
-                    fontWeight: 700,
-                    marginBottom: 0,
-                  }}
-                  initial={{ y: "105%" }}
-                  animate={heroInView ? { y: "0%" } : {}}
-                  transition={{
-                    type: "spring",
-                    stiffness: 50,
-                    damping: 17,
-                    delay: 0.08 + i * 0.1,
-                  }}
-                >
-                  {word}
-                </motion.h1>
+              {/* Name */}
+              <div className="flex flex-col gap-0">
+                {["PABLO", "PARMA"].map((word, i) => (
+                  <div key={word} className="overflow-hidden">
+                    <motion.h1
+                      className="font-heading-1 text-default-font leading-none select-none"
+                      style={{
+                        fontSize: "clamp(56px, 7.5vw, 108px)",
+                        letterSpacing: "-0.035em",
+                        fontWeight: 700,
+                      }}
+                      initial={{ y: "110%" }}
+                      animate={{ y: "0%" }}
+                      transition={{
+                        type: "spring",
+                        stiffness: 50,
+                        damping: 17,
+                        delay: 0.6 + i * 0.1,
+                      }}
+                    >
+                      {word}
+                    </motion.h1>
+                  </div>
+                ))}
               </div>
-            ))}
 
-            {/* Bio */}
-            <motion.div
-              className="flex flex-col gap-3 max-w-[480px]"
-              initial={{ opacity: 0, y: 14 }}
-              animate={heroInView ? { opacity: 1, y: 0 } : {}}
-              transition={{ type: "spring", stiffness: 50, damping: 20, delay: 0.3 }}
-            >
-              <p
-                className="text-body-big font-body-big text-subtext-color"
-                style={{ lineHeight: 1.75, textWrap: "pretty" } as React.CSSProperties}
+              {/* Bio */}
+              <motion.div
+                className="flex flex-col gap-2"
+                initial={{ opacity: 0, y: 8 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.85, duration: 0.5, ease: "easeOut" }}
               >
-                10+ years creating user-centered digital experiences,
-                proudly based in Argentina.
-              </p>
-              <p
-                className="text-body font-body text-default-font"
-                style={{ lineHeight: 1.8, textWrap: "pretty" } as React.CSSProperties}
-              >
-                Beyond design, deeply passionate about photography —
-                the landscapes and wildlife of Patagonia.
-              </p>
-              <Link href="/cv">
-                <motion.span
-                  className="inline-flex items-center gap-1 text-caption font-caption text-subtext-color mt-1"
-                  style={{ textDecoration: "underline", textUnderlineOffset: "4px" }}
-                  whileHover={{ x: 3 }}
-                  transition={{ type: "spring", stiffness: 400, damping: 17 }}
+                <p
+                  className="text-body font-body text-subtext-color"
+                  style={{ lineHeight: 1.75, textWrap: "pretty" } as React.CSSProperties}
                 >
-                  Download CV ↗
-                </motion.span>
-              </Link>
+                  10+ years creating user-centered digital experiences,
+                  proudly based in Argentina.
+                </p>
+                <p
+                  className="text-body font-body text-default-font"
+                  style={{ lineHeight: 1.75, textWrap: "pretty" } as React.CSSProperties}
+                >
+                  Beyond design, deeply passionate about photography —
+                  the landscapes and wildlife of Patagonia.
+                </p>
+                <Link href="/cv">
+                  <motion.span
+                    className="inline-flex items-center gap-1 text-caption font-caption text-subtext-color mt-2"
+                    style={{ textDecoration: "underline", textUnderlineOffset: "4px" }}
+                    whileHover={{ x: 3 }}
+                    transition={{ type: "spring", stiffness: 400, damping: 17 }}
+                  >
+                    Download CV ↗
+                  </motion.span>
+                </Link>
+              </motion.div>
             </motion.div>
           </div>
+
         </div>
       </div>
 
