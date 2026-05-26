@@ -289,7 +289,7 @@ function Index() {
                 </motion.div>
               </Link>
               <motion.a
-                href="/about"
+                href="/contact"
                 className="text-body font-body text-subtext-color underline-offset-4 hover:underline"
                 whileHover={{ x: 3 }}
                 transition={{ type: "spring" as const, stiffness: 400, damping: 17 }}

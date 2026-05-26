@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useRef } from "react";
+import React, { useEffect, useRef } from "react";
 import { Footer } from "@/ui/components/Footer";
 import { LinkButton } from "@/ui/components/LinkButton";
 import { NavigationHeader } from "@/ui/components/NavigationHeader";
@@ -98,18 +98,25 @@ function AboutSection({
 /* ─── Page ─────────────────────────────────────────────────────────────────── */
 
 function About() {
-  const imgContainerRef = useRef<HTMLDivElement>(null);
-
-  /* Parallax on the background image */
-  const { scrollYProgress: imgProgress } = useScroll({
-    target: imgContainerRef,
-    offset: ["start start", "end start"],
+  /* Scroll-driven fade for the content+footer block */
+  const contentRef = useRef<HTMLDivElement>(null);
+  const { scrollYProgress: contentProgress } = useScroll({
+    target: contentRef,
+    offset: ["start end", "start 50%"],
   });
-  const imgY = useTransform(imgProgress, [0, 1], ["0%", "22%"]);
+  /* Fade in over the first half of the element entering the viewport */
+  const contentOpacity = useTransform(contentProgress, [0, 1], [0, 1]);
+
+  /* Prevent browser scroll-restoration from landing mid-page */
+  useEffect(() => {
+    window.history.scrollRestoration = "manual";
+    window.scrollTo(0, 0);
+  }, []);
 
   return (
     <div className="flex h-full w-full flex-col items-center bg-default-background">
       <NavigationHeader
+        className="z-50"
         title="Pablo Parma"
         navigation={
           <>
@@ -158,18 +165,18 @@ function About() {
         }
       />
 
-      {/* ── Hero — sticky image + frosted glass card ── */}
-      <div
-        ref={imgContainerRef}
-        className="relative w-full"
-        style={{ height: "160dvh" }}
-      >
-        <div className="sticky top-0 h-screen w-full overflow-hidden">
+      {/* ── Hero spacer — creates 100dvh of scroll space ── */}
+      {/* The actual hero is position:fixed so it never moves */}
+      <div style={{ height: "calc(100dvh - 74px)", width: "100%" }}>
 
+        {/* Fixed hero — completely static, behind everything */}
+        <div
+          className="fixed top-0 left-0 right-0 w-full overflow-hidden"
+          style={{ height: "100dvh", zIndex: 1 }}
+        >
           {/* Background image — flipped horizontally for composition */}
           <motion.div
             className="absolute inset-0"
-            style={{ y: imgY }}
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ duration: 1.3, ease: "easeOut" }}
@@ -178,15 +185,19 @@ function About() {
               src="https://res.cloudinary.com/subframe/image/upload/v1756172560/uploads/20526/b3gp8ugog2wackvbix8e.jpg"
               alt="Patagonia landscape, Argentina"
               className="w-full h-full object-cover"
-              style={{ transform: "scaleX(-1) scale(1.1)", transformOrigin: "center center" }}
+              style={{ transform: "scaleX(-1)", transformOrigin: "center center" }}
             />
           </motion.div>
 
-          {/* Frosted glass card — left-aligned, slightly above centre */}
+          {/* Frosted glass card — inside a centered max-width container */}
           <div
-            className="absolute inset-0 flex items-center mobile:px-6"
-            style={{ paddingLeft: "clamp(48px, 8vw, 140px)", paddingRight: "clamp(48px, 8vw, 140px)" }}
+            className="absolute inset-0 flex items-start"
+            style={{ paddingTop: "74px" }}
           >
+            <div
+              className="w-full mx-auto flex items-center px-14 mobile:px-6"
+              style={{ maxWidth: "1440px", height: "100%", paddingBottom: "22vh" }}
+            >
             <motion.div
               className="flex flex-col gap-5 p-8 mobile:p-6"
               style={{
@@ -197,7 +208,6 @@ function About() {
                 borderRadius: "16px",
                 maxWidth: "580px",
                 width: "100%",
-                marginTop: "-5vh",
               }}
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
@@ -210,43 +220,44 @@ function About() {
                 animate={{ opacity: 1 }}
                 transition={{ delay: 0.75, duration: 0.4 }}
               >
-                <span className="text-caption font-caption uppercase tracking-widest" style={{ color: "rgb(75, 75, 75)" }}>
+                <span className="text-caption font-caption uppercase tracking-widest" style={{ color: "rgb(23, 23, 23)" }}>
                   Product Designer
                 </span>
-                <div className="w-px h-3 flex-none bg-neutral-border" />
-                <span className="text-caption font-caption" style={{ color: "rgb(75, 75, 75)" }}>
+                <div className="w-px h-3 flex-none bg-neutral-border opacity-40" />
+                <span className="text-caption font-caption" style={{ color: "rgb(23, 23, 23)" }}>
                   Rosario, Argentina
                 </span>
-                <div className="w-px h-3 flex-none bg-neutral-border" />
-                <span className="text-caption font-caption" style={{ color: "rgb(34, 197, 94)" }}>
+                <div className="w-px h-3 flex-none bg-neutral-border opacity-40" />
+                <span
+                  className="text-caption font-caption"
+                  style={{
+                    color: "rgb(255, 255, 255)",
+                    backgroundColor: "rgb(34, 197, 94)",
+                    borderRadius: "999px",
+                    padding: "2px 8px",
+                    letterSpacing: "0.02em",
+                  }}
+                >
                   ● Available
                 </span>
               </motion.div>
 
               {/* Name */}
-              <div className="flex flex-col gap-0">
-                {["PABLO", "PARMA"].map((word, i) => (
-                  <div key={word} className="overflow-hidden">
-                    <motion.h1
-                      className="font-heading-1 text-default-font leading-none select-none"
-                      style={{
-                        fontSize: "clamp(38px, 4.5vw, 68px)",
-                        letterSpacing: "-0.03em",
-                        fontWeight: 700,
-                      }}
-                      initial={{ y: "110%" }}
-                      animate={{ y: "0%" }}
-                      transition={{
-                        type: "spring",
-                        stiffness: 50,
-                        damping: 17,
-                        delay: 0.6 + i * 0.1,
-                      }}
-                    >
-                      {word}
-                    </motion.h1>
-                  </div>
-                ))}
+              <div className="overflow-hidden">
+                <motion.h1
+                  className="font-heading-1 text-default-font leading-none select-none"
+                  style={{
+                    fontSize: "clamp(28px, 3.6vw, 56px)",
+                    letterSpacing: "-0.03em",
+                    fontWeight: 700,
+                    whiteSpace: "nowrap",
+                  }}
+                  initial={{ y: "110%" }}
+                  animate={{ y: "0%" }}
+                  transition={{ type: "spring", stiffness: 50, damping: 17, delay: 0.6 }}
+                >
+                  PABLO PARMA
+                </motion.h1>
               </div>
 
               {/* Bio */}
@@ -258,7 +269,7 @@ function About() {
               >
                 <p
                   className="text-body font-body"
-                  style={{ lineHeight: 1.75, textWrap: "pretty", color: "rgb(75, 75, 75)" } as React.CSSProperties}
+                  style={{ lineHeight: 1.75, textWrap: "pretty", color: "rgb(23, 23, 23)" } as React.CSSProperties}
                 >
                   10+ years creating user-centered digital experiences,
                   proudly based in Argentina.
@@ -272,7 +283,7 @@ function About() {
                 </p>
                 <Link href="/cv">
                   <motion.span
-                    className="inline-flex items-center gap-1 text-caption font-caption text-subtext-color mt-2"
+                    className="inline-flex items-center gap-1 text-caption font-caption text-default-font mt-2"
                     style={{ textDecoration: "underline", textUnderlineOffset: "4px" }}
                     whileHover={{ x: 3 }}
                     transition={{ type: "spring", stiffness: 400, damping: 17 }}
@@ -282,15 +293,16 @@ function About() {
                 </Link>
               </motion.div>
             </motion.div>
+            </div>
           </div>
-
         </div>
-      </div>
 
-      {/* ── Content sections ─────────────────────────────────────────────── */}
-      <div
+      </div>
+      {/* ── Content + Footer — fades in over hero, solid bg kills bleed-through ── */}
+      <motion.div
+        ref={contentRef}
         className="relative w-full"
-        style={{ zIndex: 30, background: "rgb(249, 246, 241)" }}
+        style={{ zIndex: 30, background: "rgb(249, 246, 241)", opacity: contentOpacity }}
       >
         <main className="w-full max-w-7xl mx-auto px-14 pb-24 mobile:px-6">
 
@@ -340,10 +352,9 @@ function About() {
 
           <AnimLine />
         </main>
-      </div>
 
-      {/* ── Footer ──────────────────────────────────────────────────────────── */}
-      <Footer
+        {/* Footer lives inside the same solid wrapper — no hero bleed-through */}
+        <Footer
         createdWithText="Proudly created and coded using:"
         tools={
           <>
@@ -381,6 +392,7 @@ function About() {
         }
         copyright="© 2025 Pablo Parma"
       />
+      </motion.div>
     </div>
   );
 }
