@@ -67,11 +67,12 @@ const LinkButtonRoot = React.forwardRef<HTMLButtonElement, LinkButtonRootProps>(
         {children ? (
           <span
             className={SubframeUtils.twClassNames(
-              "text-body font-body text-neutral-700 group-hover/a4ee726a:text-brand-700 group-hover/a4ee726a:underline group-disabled/a4ee726a:text-neutral-400 group-hover/a4ee726a:group-disabled/a4ee726a:text-neutral-400 group-hover/a4ee726a:group-disabled/a4ee726a:no-underline",
+              "text-body font-body text-neutral-700 group-hover/a4ee726a:text-brand-700 no-underline group-disabled/a4ee726a:text-neutral-400 group-hover/a4ee726a:group-disabled/a4ee726a:text-neutral-400 group-hover/a4ee726a:group-disabled/a4ee726a:no-underline",
               {
                 "text-caption font-caption": size === "small",
                 "text-heading-3 font-heading-3": size === "large",
-                "no-underline": variant === "active",
+                /* hover underline only for brand variant — neutral/active (nav) never get it */
+                "group-hover/a4ee726a:underline": variant === "brand",
                 "text-white group-hover/a4ee726a:text-white":
                   variant === "inverse",
                 "text-brand-700 group-hover/a4ee726a:text-brand-700":
