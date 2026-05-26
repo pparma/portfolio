@@ -107,6 +107,12 @@ function ScrollVideoHero() {
 
 /* ─── Folder-style work card ──────────────────────────────────────────────── */
 
+/* Folder shape path — from filefoldershape.svg
+   viewBox 0 0 514 514 (square).
+   Tab sits top-left; diagonal ramp at ~36% width; right shelf flat at y=62 (~12%). */
+const FOLDER_PATH =
+  "M0 24C0 10.7452 10.7452 0 24 0H184.615C190.947 0 197.022 2.50218 201.518 6.96142L242.965 48.0771C251.955 56.9956 264.106 62 276.769 62H490C503.255 62 514 72.7452 514 86V490C514 503.255 503.255 514 490 514H24C10.7452 514 0 503.255 0 490V24Z";
+
 function WorkCard({
   index,
   number,
@@ -125,11 +131,10 @@ function WorkCard({
   const ref = useRef(null);
   const isInView = useInView(ref, { once: true, margin: "-60px" });
 
-  const bg      = dark ? "rgb(17, 17, 17)"         : "rgb(228, 222, 215)";
-  const tabBg   = dark ? "rgb(30, 31, 38)"          : "rgb(213, 206, 198)";
-  const text    = dark ? "rgb(249, 246, 241)"       : "rgb(23, 23, 23)";
-  const sub     = dark ? "rgba(249,246,241,0.50)"   : "rgb(115, 115, 115)";
-  const num     = dark ? "rgba(249,246,241,0.20)"   : "rgba(23,23,23,0.18)";
+  const fill = dark ? "rgb(17, 17, 17)"       : "rgb(228, 222, 215)";
+  const text = dark ? "rgb(249, 246, 241)"     : "rgb(23, 23, 23)";
+  const sub  = dark ? "rgba(249,246,241,0.50)" : "rgb(115, 115, 115)";
+  const num  = dark ? "rgba(249,246,241,0.20)" : "rgba(23,23,23,0.18)";
 
   return (
     <motion.div
@@ -138,38 +143,33 @@ function WorkCard({
       animate={isInView ? { opacity: 1, y: 0 } : {}}
       transition={{ type: "spring" as const, stiffness: 55, damping: 20, delay: index * 0.1 }}
       whileHover={{ y: -8, transition: { type: "spring" as const, stiffness: 380, damping: 22 } }}
-      style={{ cursor: "pointer", paddingTop: "10px" /* room for the tab */ }}
+      style={{ cursor: "pointer" }}
     >
       <Link href={href}>
         <div style={{ position: "relative" }}>
-          {/* Folder tab — sits flush above the top-left corner */}
+          {/* Authentic folder shape — SVG scales 1:1 (square card) */}
+          <svg
+            viewBox="0 0 514 514"
+            width="100%"
+            aria-hidden="true"
+            style={{ display: "block" }}
+          >
+            <path d={FOLDER_PATH} fill={fill} />
+          </svg>
+
+          {/* Content — overlaid, top padding clears the tab shelf (~12% + gutter) */}
           <div
             style={{
               position: "absolute",
-              top: 0,
-              left: 0,
-              width: "68px",
-              height: "10px",
-              backgroundColor: tabBg,
-              borderRadius: "5px 5px 0 0",
-              transform: "translateY(-100%)",
-            }}
-          />
-
-          {/* Card body — top-left corner is flat (folder edge) */}
-          <div
-            style={{
-              backgroundColor: bg,
-              borderRadius: "0 18px 18px 18px",
-              padding: "24px 26px 26px",
-              minHeight: "280px",
+              inset: 0,
               display: "flex",
               flexDirection: "column",
               justifyContent: "space-between",
-              gap: "32px",
+              padding: "clamp(14px, 5.5%, 28px)",
+              paddingTop: "calc(13.5% + 4px)",
             }}
           >
-            {/* Number — top right */}
+            {/* Number — sits in the right-side shelf of the tab row */}
             <div style={{ display: "flex", justifyContent: "flex-end" }}>
               <span
                 style={{
@@ -184,12 +184,12 @@ function WorkCard({
               </span>
             </div>
 
-            {/* Text — bottom */}
+            {/* Text — anchored to bottom */}
             <div style={{ display: "flex", flexDirection: "column", gap: "8px" }}>
               <span
                 style={{
                   color: text,
-                  fontSize: "clamp(16px, 1.35vw, 21px)",
+                  fontSize: "clamp(15px, 1.25vw, 20px)",
                   fontWeight: 700,
                   lineHeight: 1.2,
                   letterSpacing: "-0.02em",
