@@ -11,11 +11,11 @@ import { motion, useInView, useScroll, useTransform } from "framer-motion";
 
 /* ─── Animated rule ───────────────────────────────────────────────────────── */
 
-function AnimLine({ delay = 0, className = "" }: { delay?: number; className?: string }) {
+function AnimLine({ delay = 0 }: { delay?: number }) {
   const ref = useRef(null);
   const inView = useInView(ref, { once: true, margin: "-60px" });
   return (
-    <div ref={ref} className={`w-full h-px overflow-hidden ${className}`}>
+    <div ref={ref} className="w-full h-px overflow-hidden">
       <motion.div
         className="h-full w-full bg-neutral-border origin-left"
         initial={{ scaleX: 0 }}
@@ -98,15 +98,24 @@ function AboutSection({
 /* ─── Page ─────────────────────────────────────────────────────────────────── */
 
 function About() {
-  const heroRef = useRef<HTMLDivElement>(null);
+  const imgContainerRef = useRef<HTMLDivElement>(null);
+  const heroWrapperRef  = useRef<HTMLDivElement>(null);
+  const heroRef         = useRef<HTMLDivElement>(null);
+  const heroInView      = useInView(heroRef, { once: true, amount: 0.15 });
 
-  const { scrollYProgress: heroProgress } = useScroll({
-    target: heroRef,
+  /* Parallax on the background image */
+  const { scrollYProgress: imgProgress } = useScroll({
+    target: imgContainerRef,
     offset: ["start start", "end start"],
   });
-  const heroImgY   = useTransform(heroProgress, [0, 1], ["0%", "22%"]);
-  const heroTextY  = useTransform(heroProgress, [0, 1], ["0%",  "7%"]);
-  const heroOpacity = useTransform(heroProgress, [0, 0.6], [1, 0]);
+  const imgY = useTransform(imgProgress, [0, 1], ["0%", "25%"]);
+
+  /* Scroll-driven background on the text panel — mirrors homepage pattern */
+  const { scrollYProgress: heroScrollProgress } = useScroll({
+    target: heroWrapperRef,
+    offset: ["start end", "end start"],
+  });
+  const heroBgOpacity = useTransform(heroScrollProgress, [0, 0.25], [0, 1]);
 
   return (
     <div className="flex h-full w-full flex-col items-center bg-default-background">
@@ -159,25 +168,49 @@ function About() {
         }
       />
 
-      {/* ── Hero ──────────────────────────────────────────────────────────── */}
-      <section
-        ref={heroRef}
-        className="relative w-full overflow-hidden"
-        style={{ minHeight: "92dvh" }}
+      {/* ── Full-bleed background image (200dvh = image stays visible during scroll-in) ── */}
+      <div
+        ref={imgContainerRef}
+        className="relative w-full"
+        style={{ height: "200dvh" }}
       >
-        {/* Two-col split */}
-        <div className="flex h-full" style={{ minHeight: "92dvh" }}>
+        <div className="sticky top-0 h-screen w-full overflow-hidden">
+          <motion.img
+            src="https://res.cloudinary.com/subframe/image/upload/v1756172560/uploads/20526/b3gp8ugog2wackvbix8e.jpg"
+            alt="Patagonia landscape, Argentina"
+            className="h-full w-full object-cover"
+            style={{ y: imgY, scale: 1.08, transformOrigin: "center top" }}
+            initial={{ opacity: 0, scale: 1.1 }}
+            animate={{ opacity: 1, scale: 1.08 }}
+            transition={{ duration: 1.3, ease: "easeOut" }}
+          />
+        </div>
+      </div>
 
-          {/* Left: identity */}
+      {/* ── Hero text panel — pulls up 100dvh to overlay the image's last viewport ── */}
+      <div
+        ref={heroWrapperRef}
+        className="relative w-full"
+        style={{ marginTop: "-100dvh", height: "200dvh", zIndex: 20 }}
+      >
+        <div
+          ref={heroRef}
+          className="sticky top-0 flex flex-col justify-center"
+          style={{ minHeight: "100dvh" }}
+        >
+          {/* Scroll-driven background — transparent on entry, solid as it settles */}
           <motion.div
-            className="relative z-10 flex flex-1 flex-col justify-center gap-10 px-14 py-20 mobile:px-6 mobile:py-12"
-            style={{ y: heroTextY, opacity: heroOpacity }}
-          >
-            {/* Metadata row */}
+            className="absolute inset-0 pointer-events-none"
+            style={{ backgroundColor: "rgb(249, 246, 241)", opacity: heroBgOpacity }}
+          />
+
+          <div className="relative max-w-7xl mx-auto w-full flex flex-col items-start gap-8 px-14 mobile:px-6">
+
+            {/* Metadata */}
             <motion.div
               className="flex items-center gap-3 flex-wrap"
-              initial={{ opacity: 0, x: -10 }}
-              animate={{ opacity: 1, x: 0 }}
+              initial={{ opacity: 0, y: 10 }}
+              animate={heroInView ? { opacity: 1, y: 0 } : {}}
               transition={{ duration: 0.5, ease: "easeOut" }}
             >
               <span className="text-caption font-caption text-subtext-color uppercase tracking-widest">
@@ -196,42 +229,41 @@ function About() {
               </span>
             </motion.div>
 
-            {/* Name — oversized clip reveal */}
-            <div className="flex flex-col gap-0">
-              {["PABLO", "PARMA"].map((word, i) => (
-                <div key={word} className="overflow-hidden">
-                  <motion.span
-                    className="block font-heading-1 text-default-font leading-none select-none"
-                    style={{
-                      fontSize: "clamp(72px, 9.5vw, 136px)",
-                      letterSpacing: "-0.035em",
-                      fontWeight: 700,
-                    }}
-                    initial={{ y: "105%" }}
-                    animate={{ y: "0%" }}
-                    transition={{
-                      type: "spring",
-                      stiffness: 50,
-                      damping: 17,
-                      delay: 0.08 + i * 0.1,
-                    }}
-                  >
-                    {word}
-                  </motion.span>
-                </div>
-              ))}
-            </div>
+            {/* Name — clip-path slide up */}
+            {["PABLO", "PARMA"].map((word, i) => (
+              <div key={word} className="overflow-hidden" style={{ marginTop: i === 0 ? 0 : "-0.1em" }}>
+                <motion.h1
+                  className="font-heading-1 text-default-font leading-none select-none"
+                  style={{
+                    fontSize: "clamp(72px, 9.5vw, 136px)",
+                    letterSpacing: "-0.035em",
+                    fontWeight: 700,
+                    marginBottom: 0,
+                  }}
+                  initial={{ y: "105%" }}
+                  animate={heroInView ? { y: "0%" } : {}}
+                  transition={{
+                    type: "spring",
+                    stiffness: 50,
+                    damping: 17,
+                    delay: 0.08 + i * 0.1,
+                  }}
+                >
+                  {word}
+                </motion.h1>
+              </div>
+            ))}
 
             {/* Bio */}
             <motion.div
-              className="flex flex-col gap-3 max-w-[420px]"
-              initial={{ opacity: 0, y: 16 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ type: "spring", stiffness: 50, damping: 20, delay: 0.38 }}
+              className="flex flex-col gap-3 max-w-[480px]"
+              initial={{ opacity: 0, y: 14 }}
+              animate={heroInView ? { opacity: 1, y: 0 } : {}}
+              transition={{ type: "spring", stiffness: 50, damping: 20, delay: 0.3 }}
             >
               <p
-                className="text-body font-body text-subtext-color"
-                style={{ lineHeight: 1.8, textWrap: "pretty" } as React.CSSProperties}
+                className="text-body-big font-body-big text-subtext-color"
+                style={{ lineHeight: 1.75, textWrap: "pretty" } as React.CSSProperties}
               >
                 10+ years creating user-centered digital experiences,
                 proudly based in Argentina.
@@ -254,94 +286,64 @@ function About() {
                 </motion.span>
               </Link>
             </motion.div>
-          </motion.div>
-
-          {/* Right: Patagonia image — parallax */}
-          <div className="relative flex-1 overflow-hidden mobile:hidden">
-            <motion.img
-              src="https://res.cloudinary.com/subframe/image/upload/v1756172560/uploads/20526/b3gp8ugog2wackvbix8e.jpg"
-              alt="Patagonia landscape, Argentina"
-              className="absolute inset-0 w-full h-full object-cover"
-              style={{ y: heroImgY, scale: 1.12, transformOrigin: "center top" }}
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              transition={{ duration: 1.1, ease: "easeOut", delay: 0.15 }}
-            />
-            {/* Subtle left-edge vignette to blend into background */}
-            <div
-              className="absolute inset-y-0 left-0 w-24 pointer-events-none"
-              style={{
-                background: "linear-gradient(to right, rgb(249,246,241), transparent)",
-              }}
-            />
           </div>
         </div>
-
-        {/* Mobile: image below text */}
-        <motion.div
-          className="hidden mobile:block w-full overflow-hidden"
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ duration: 0.9, delay: 0.3 }}
-        >
-          <img
-            src="https://res.cloudinary.com/subframe/image/upload/v1756172560/uploads/20526/b3gp8ugog2wackvbix8e.jpg"
-            alt="Patagonia landscape, Argentina"
-            className="w-full object-cover"
-            style={{ aspectRatio: "4/3" }}
-          />
-        </motion.div>
-      </section>
+      </div>
 
       {/* ── Content sections ─────────────────────────────────────────────── */}
-      <main className="w-full max-w-7xl mx-auto px-14 pb-24 mobile:px-6">
+      <div
+        className="relative w-full"
+        style={{ zIndex: 30, background: "rgb(249, 246, 241)" }}
+      >
+        <main className="w-full max-w-7xl mx-auto px-14 pb-24 mobile:px-6">
 
-        <AboutSection
-          index="01"
-          heading="What sets me apart?"
-          body="Whether I'm exploring nature, experimenting with new creative tools, or collaborating on design projects, I bring the same curiosity, dedication, and love for meaningful experiences that define both my personal and professional journey."
-          accent={
-            <motion.div
-              className="mt-2 overflow-hidden rounded-lg"
-              style={{ maxWidth: "260px" }}
-              whileHover={{ scale: 1.02 }}
-              transition={{ type: "spring", stiffness: 300, damping: 22 }}
-            >
-              <img
-                src="https://res.cloudinary.com/subframe/image/upload/v1756173928/uploads/20526/yypeb07pkssolmvs6bgg.jpg"
-                alt="Hummingbird — Patagonian wildlife"
-                className="w-full block"
-              />
-            </motion.div>
-          }
-        />
+          <AboutSection
+            index="01"
+            heading="What sets me apart?"
+            body="Whether I'm exploring nature, experimenting with new creative tools, or collaborating on design projects, I bring the same curiosity, dedication, and love for meaningful experiences that define both my personal and professional journey."
+            accent={
+              <motion.div
+                className="mt-2 overflow-hidden rounded-lg"
+                style={{ maxWidth: "240px" }}
+                whileHover={{ scale: 1.03 }}
+                transition={{ type: "spring", stiffness: 300, damping: 22 }}
+              >
+                <img
+                  src="https://res.cloudinary.com/subframe/image/upload/v1756173928/uploads/20526/yypeb07pkssolmvs6bgg.jpg"
+                  alt="Hummingbird — Patagonian wildlife"
+                  className="w-full block"
+                />
+              </motion.div>
+            }
+          />
 
-        <AboutSection
-          index="02"
-          heading="I'm resourceful"
-          body="More than 10 years as a designer has given me breadth across User Research, SEO, Digital Marketing, HTML and CSS, AR, 3D, and AI tools. I reach for whatever it takes to solve the problem well."
-        />
+          <AboutSection
+            index="02"
+            heading="I'm resourceful"
+            body="More than 10 years as a designer has given me breadth across User Research, SEO, Digital Marketing, HTML and CSS, AR, 3D, and AI tools. I reach for whatever it takes to solve the problem well."
+          />
 
-        <AboutSection
-          index="03"
-          heading="I'm eager to experiment"
-          body="Not every project is equal. I regularly step outside my comfort zone and apply new ideas, methodologies, or processes to find what works. I can adapt — I'm always evolving."
-        />
+          <AboutSection
+            index="03"
+            heading="I'm eager to experiment"
+            body="Not every project is equal. I regularly step outside my comfort zone and apply new ideas, methodologies, or processes to find what works. I can adapt — I'm always evolving."
+          />
 
-        <AboutSection
-          index="04"
-          heading="I'm always learning"
-          body="The UI/UX field never stops expanding — new tools, technologies, trends, methodologies. I consider myself a T-shaped Designer: broad across disciplines, deep where it matters most."
-        />
+          <AboutSection
+            index="04"
+            heading="I'm always learning"
+            body="The UI/UX field never stops expanding — new tools, technologies, trends, methodologies. I consider myself a T-shaped Designer: broad across disciplines, deep where it matters most."
+          />
 
-        <AboutSection
-          index="05"
-          heading="I'm empathetic"
-          body="Understanding users' perspectives is the key to identifying real pain points. Being empathic as a habit also raises the quality of the work we put out — and the lives we lead."
-        />
+          <AboutSection
+            index="05"
+            heading="I'm empathetic"
+            body="Understanding users' perspectives is the key to identifying real pain points. Being empathic as a habit also raises the quality of the work we put out — and the lives we lead."
+          />
 
-        <AnimLine />
-      </main>
+          <AnimLine />
+        </main>
+      </div>
 
       {/* ── Footer ──────────────────────────────────────────────────────────── */}
       <Footer
