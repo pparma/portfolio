@@ -72,6 +72,20 @@ module.exports = {
         "neutral-border": "rgb(224, 216, 209)",
         white: "rgb(255, 255, 255)",
         "default-background": "rgb(249, 246, 241)",
+
+        /* ── Design system expansion ─────────────────────────────────────── */
+        /* Accent — red-orange, the sole chromatic color across all references */
+        "accent":           "rgb(232, 80, 0)",
+        "accent-hover":     "rgb(210, 68, 0)",
+        "accent-subtle":    "rgb(232, 80, 0, 0.10)",
+
+        /* Dark surfaces — inverted sections, dark cards */
+        "surface-dark":     "rgb(17, 17, 17)",
+        "surface-dark-2":   "rgb(30, 31, 38)",   /* slightly warm dark for cards */
+
+        /* Mid surfaces — light card bg, distinct from the warm page cream */
+        "surface-mid":      "rgb(235, 235, 235)",
+        "surface-mid-2":    "rgb(245, 245, 245)",
       },
       fontSize: {
         caption: [

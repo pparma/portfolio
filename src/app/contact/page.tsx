@@ -123,7 +123,7 @@ export default function ContactPage() {
   }
 
   return (
-    <div className="flex h-full w-full flex-col items-center bg-default-background">
+    <div className="flex min-h-screen w-full flex-col items-center bg-default-background">
       <NavigationHeader
         className="z-50"
         title="Pablo Parma"
@@ -338,8 +338,8 @@ export default function ContactPage() {
                     disabled={status === "sending"}
                     className="self-start flex items-center gap-3 px-8 py-4 text-caption font-caption uppercase tracking-widest"
                     style={{
-                      backgroundColor: "rgb(23, 23, 23)",
-                      color: "rgb(249, 246, 241)",
+                      backgroundColor: "var(--color-accent)",
+                      color: "rgb(255, 255, 255)",
                       borderRadius: "999px",
                       border: "none",
                       cursor: status === "sending" ? "not-allowed" : "pointer",

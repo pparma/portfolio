@@ -2,6 +2,27 @@
 @tailwind components;
 @tailwind utilities;
 
+:root {
+  /* Existing tokens */
+  --color-background:    rgb(249, 246, 241);
+  --color-font:          rgb(23, 23, 23);
+  --color-subtext:       rgb(115, 115, 115);
+  --color-border:        rgb(224, 216, 209);
+
+  /* Accent — red-orange, the sole chromatic color */
+  --color-accent:        rgb(232, 80, 0);
+  --color-accent-hover:  rgb(210, 68, 0);
+  --color-accent-subtle: rgba(232, 80, 0, 0.10);
+
+  /* Dark surfaces — inverted sections, dark cards */
+  --color-surface-dark:  rgb(17, 17, 17);
+  --color-surface-dark2: rgb(30, 31, 38);
+
+  /* Mid surfaces — light card bg */
+  --color-surface-mid:   rgb(235, 235, 235);
+  --color-surface-mid2:  rgb(245, 245, 245);
+}
+
 html {
   font-family: "IBM Plex Mono", monospace;
   height: 100vh;

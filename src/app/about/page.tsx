@@ -283,7 +283,7 @@ function About() {
                 </p>
                 <Link href="/cv">
                   <motion.span
-                    className="inline-flex items-center gap-1 text-caption font-caption text-default-font mt-2"
+                    className="inline-flex items-center gap-1 text-caption font-caption text-accent mt-2"
                     style={{ textDecoration: "underline", textUnderlineOffset: "4px" }}
                     whileHover={{ x: 3 }}
                     transition={{ type: "spring", stiffness: 400, damping: 17 }}

@@ -39,7 +39,7 @@ const LinkButtonRoot = React.forwardRef<HTMLButtonElement, LinkButtonRootProps>(
           "group/a4ee726a flex cursor-pointer items-center gap-1 border-none bg-transparent",
           {
             "flex-row flex-nowrap gap-1": size === "large",
-            "border-b border-solid border-brand-primary": variant === "active",
+            "border-b border-solid border-accent": variant === "active",
           },
           className
         )}
