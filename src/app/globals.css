@@ -3,7 +3,7 @@
 @tailwind utilities;
 
 html {
-  font-family: Inter;
+  font-family: "Satoshi", sans-serif;
   height: 100vh;
   display: flex;
   flex-direction: column;

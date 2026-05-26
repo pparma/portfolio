@@ -14,14 +14,13 @@ export default function RootLayout({
   return (
     <html lang="en">
 <head>
-  <link rel="preconnect" href="https://fonts.googleapis.com"/>
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous"/>
-  {/* Single request: Manrope (body/UI) + Newsreader (headings) + Inter (base) */}
+  {/* Fontshare — Cabinet Grotesk (headings) + Satoshi (body/UI) */}
+  <link rel="preconnect" href="https://api.fontshare.com" />
+  <link rel="preconnect" href="https://cdn.fontshare.com" crossOrigin="anonymous" />
   <link
-    href="https://fonts.googleapis.com/css2?family=Manrope:wght@200;300;400;500;600;700;800&family=Newsreader:ital,opsz,wght@0,6..72,200..800;1,6..72,200..800&family=Inter:wght@300;400;500;600;700&display=swap"
+    href="https://api.fontshare.com/v2/css?f[]=cabinet-grotesk@800,700,500,400&f[]=satoshi@700,500,400,300&display=swap"
     rel="stylesheet"
   />
-  <link rel="stylesheet" href="https://use.typekit.net/alk6jdx.css"></link>
 
   
 </head>
