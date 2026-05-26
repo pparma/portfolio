@@ -182,18 +182,22 @@ function About() {
             />
           </motion.div>
 
-          {/* Frosted glass card — left-aligned, vertically centred */}
-          <div className="absolute inset-0 flex items-center px-14 mobile:px-6">
+          {/* Frosted glass card — left-aligned, slightly above centre */}
+          <div
+            className="absolute inset-0 flex items-center mobile:px-6"
+            style={{ paddingLeft: "clamp(48px, 8vw, 140px)", paddingRight: "clamp(48px, 8vw, 140px)" }}
+          >
             <motion.div
               className="flex flex-col gap-5 p-8 mobile:p-6"
               style={{
-                backgroundColor: "rgba(249, 246, 241, 0.18)",
+                backgroundColor: "rgba(249, 246, 241, 0.30)",
                 backdropFilter: "blur(28px)",
                 WebkitBackdropFilter: "blur(28px)",
-                border: "1px solid rgba(249, 246, 241, 0.35)",
+                border: "1px solid rgba(249, 246, 241, 0.45)",
                 borderRadius: "16px",
-                maxWidth: "480px",
+                maxWidth: "580px",
                 width: "100%",
+                marginTop: "-5vh",
               }}
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
@@ -206,11 +210,11 @@ function About() {
                 animate={{ opacity: 1 }}
                 transition={{ delay: 0.75, duration: 0.4 }}
               >
-                <span className="text-caption font-caption text-subtext-color uppercase tracking-widest">
+                <span className="text-caption font-caption uppercase tracking-widest" style={{ color: "rgb(75, 75, 75)" }}>
                   Product Designer
                 </span>
                 <div className="w-px h-3 flex-none bg-neutral-border" />
-                <span className="text-caption font-caption text-subtext-color">
+                <span className="text-caption font-caption" style={{ color: "rgb(75, 75, 75)" }}>
                   Rosario, Argentina
                 </span>
                 <div className="w-px h-3 flex-none bg-neutral-border" />
@@ -226,8 +230,8 @@ function About() {
                     <motion.h1
                       className="font-heading-1 text-default-font leading-none select-none"
                       style={{
-                        fontSize: "clamp(56px, 7.5vw, 108px)",
-                        letterSpacing: "-0.035em",
+                        fontSize: "clamp(38px, 4.5vw, 68px)",
+                        letterSpacing: "-0.03em",
                         fontWeight: 700,
                       }}
                       initial={{ y: "110%" }}
@@ -253,8 +257,8 @@ function About() {
                 transition={{ delay: 0.85, duration: 0.5, ease: "easeOut" }}
               >
                 <p
-                  className="text-body font-body text-subtext-color"
-                  style={{ lineHeight: 1.75, textWrap: "pretty" } as React.CSSProperties}
+                  className="text-body font-body"
+                  style={{ lineHeight: 1.75, textWrap: "pretty", color: "rgb(75, 75, 75)" } as React.CSSProperties}
                 >
                   10+ years creating user-centered digital experiences,
                   proudly based in Argentina.
