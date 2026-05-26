@@ -4,177 +4,93 @@ import React, { useRef } from "react";
 import { Footer } from "@/ui/components/Footer";
 import { LinkButton } from "@/ui/components/LinkButton";
 import { NavigationHeader } from "@/ui/components/NavigationHeader";
-import { DefaultPageLayout } from "@/ui/layouts/DefaultPageLayout";
 import { FeatherInstagram, FeatherLinkedin, FeatherSend } from "@subframe/core";
 import Link from "next/link";
 import CopyEmail from "@/src/components/CopyEmail";
 import { motion, useInView, useScroll, useTransform } from "framer-motion";
 
-/* ─── Masonry ─────────────────────────────────────────────────────────────── */
+/* ─── Animated rule ───────────────────────────────────────────────────────── */
 
-const colVariants = {
-  hidden: { opacity: 0 },
-  visible: {
-    opacity: 1,
-    transition: { staggerChildren: 0.08, delayChildren: 0.05 },
-  },
-};
-
-const photoVariants = {
-  hidden: { opacity: 0, y: 28 },
-  visible: {
-    opacity: 1,
-    y: 0,
-    transition: { type: "spring" as const, stiffness: 55, damping: 18 },
-  },
-};
-
-function MasonryColumn({
-  children,
-  offsetTop = false,
-}: {
-  children: React.ReactNode;
-  offsetTop?: boolean;
-}) {
+function AnimLine({ delay = 0, className = "" }: { delay?: number; className?: string }) {
   const ref = useRef(null);
-  const isInView = useInView(ref, { once: true, margin: "-60px" });
-
+  const inView = useInView(ref, { once: true, margin: "-60px" });
   return (
-    <motion.div
-      ref={ref}
-      className={`flex max-w-[288px] grow shrink-0 basis-0 flex-col items-start gap-3 ${
-        offsetTop ? "pt-16" : ""
-      }`}
-      variants={colVariants}
-      initial="hidden"
-      animate={isInView ? "visible" : "hidden"}
-    >
-      {children}
-    </motion.div>
+    <div ref={ref} className={`w-full h-px overflow-hidden ${className}`}>
+      <motion.div
+        className="h-full w-full bg-neutral-border origin-left"
+        initial={{ scaleX: 0 }}
+        animate={inView ? { scaleX: 1 } : {}}
+        transition={{ duration: 0.75, ease: [0.25, 0.1, 0.25, 1], delay }}
+      />
+    </div>
   );
 }
 
-function MasonryItem({
-  src,
-  alt,
-  isVideo = false,
-}: {
-  src: string;
-  alt?: string;
-  isVideo?: boolean;
-}) {
-  return (
-    <motion.div
-      className="w-full flex-none rounded-lg overflow-hidden"
-      variants={photoVariants}
-      whileHover={{
-        scale: 1.03,
-        transition: { type: "spring", stiffness: 300, damping: 22 },
-      }}
-    >
-      {isVideo ? (
-        <video
-          className="w-full block"
-          src={src}
-          autoPlay
-          loop
-          muted
-          playsInline
-          preload="metadata"
-        />
-      ) : (
-        <img className="w-full block" src={src} alt={alt ?? ""} />
-      )}
-    </motion.div>
-  );
-}
+/* ─── Editorial content section ──────────────────────────────────────────── */
 
-/* ─── Text section ─────────────────────────────────────────────────────────── */
-
-function TextSection({
+function AboutSection({
   index,
   heading,
   body,
-  mobileImage,
-  mobileVideo,
+  accent,
 }: {
   index: string;
   heading: string;
   body: string;
-  mobileImage?: string;
-  mobileVideo?: string;
+  accent?: React.ReactNode;
 }) {
   const ref = useRef(null);
-  const isInView = useInView(ref, { once: true, margin: "-60px" });
+  const inView = useInView(ref, { once: true, margin: "-80px" });
 
   return (
-    <div
-      ref={ref}
-      className="flex w-full max-w-[512px] flex-col items-start gap-4 py-12 mobile:py-10"
-    >
-      {/* Mobile media */}
-      {mobileVideo && (
-        <video
-          className="hidden w-full rounded-lg aspect-video object-cover mobile:block"
-          src={mobileVideo}
-          autoPlay
-          loop
-          muted
-          playsInline
-          preload="metadata"
-        />
-      )}
-      {mobileImage && !mobileVideo && (
-        <img
-          className="hidden w-full rounded-lg object-cover aspect-[4/3] mobile:block"
-          src={mobileImage}
-          alt={heading}
-        />
-      )}
+    <div ref={ref} className="w-full">
+      <AnimLine />
+      <div className="grid grid-cols-[5fr_7fr] gap-12 py-12 mobile:grid-cols-1 mobile:gap-5 mobile:py-8">
 
-      {/* Index + animated divider */}
-      <div className="flex w-full items-center gap-3">
-        <motion.span
-          className="text-caption font-caption text-subtext-color tabular-nums shrink-0"
-          initial={{ opacity: 0 }}
-          animate={isInView ? { opacity: 1 } : { opacity: 0 }}
-          transition={{ duration: 0.35, delay: 0.05 }}
-        >
-          {index}
-        </motion.span>
-        <div className="flex-1 h-px overflow-hidden">
-          <motion.div
-            className="h-px w-full bg-neutral-border origin-left"
-            initial={{ scaleX: 0 }}
-            animate={isInView ? { scaleX: 1 } : { scaleX: 0 }}
-            transition={{ duration: 0.55, ease: [0.25, 0.1, 0.25, 1], delay: 0.1 }}
-          />
+        {/* Left — index + heading */}
+        <div className="flex flex-col gap-3">
+          <motion.span
+            className="text-caption font-caption text-subtext-color tabular-nums"
+            initial={{ opacity: 0 }}
+            animate={inView ? { opacity: 1 } : {}}
+            transition={{ duration: 0.35, delay: 0.05 }}
+          >
+            {index}
+          </motion.span>
+          <div className="overflow-hidden">
+            <motion.h2
+              className="font-heading-2 text-default-font"
+              style={{
+                fontSize: "clamp(24px, 2.8vw, 38px)",
+                lineHeight: 1.08,
+                letterSpacing: "-0.015em",
+                fontWeight: 700,
+              }}
+              initial={{ y: "110%" }}
+              animate={inView ? { y: "0%" } : {}}
+              transition={{ type: "spring", stiffness: 55, damping: 18, delay: 0.1 }}
+            >
+              {heading}
+            </motion.h2>
+          </div>
         </div>
-      </div>
 
-      {/* Heading — clip-path slide up */}
-      <div className="overflow-hidden w-full">
-        <motion.span
-          className="block text-heading-1 font-heading-1 text-brand-primary"
-          style={{ textWrap: "balance" } as React.CSSProperties}
-          initial={{ y: "110%" }}
-          animate={isInView ? { y: "0%" } : { y: "110%" }}
-          transition={{ type: "spring", stiffness: 58, damping: 18, delay: 0.15 }}
+        {/* Right — body + optional accent */}
+        <motion.div
+          className="flex flex-col gap-4 self-end"
+          initial={{ opacity: 0, y: 14 }}
+          animate={inView ? { opacity: 1, y: 0 } : {}}
+          transition={{ type: "spring", stiffness: 55, damping: 20, delay: 0.22 }}
         >
-          {heading}
-        </motion.span>
+          <p
+            className="text-body-big font-body-big text-subtext-color"
+            style={{ lineHeight: 1.75, textWrap: "pretty" } as React.CSSProperties}
+          >
+            {body}
+          </p>
+          {accent}
+        </motion.div>
       </div>
-
-      {/* Body */}
-      <motion.span
-        className="text-caption-bold font-caption-bold text-subtext-color"
-        style={{ textWrap: "pretty" } as React.CSSProperties}
-        initial={{ opacity: 0, y: 8 }}
-        animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 8 }}
-        transition={{ type: "spring", stiffness: 60, damping: 20, delay: 0.28 }}
-      >
-        {body}
-      </motion.span>
     </div>
   );
 }
@@ -182,266 +98,291 @@ function TextSection({
 /* ─── Page ─────────────────────────────────────────────────────────────────── */
 
 function About() {
-  const heroRef = useRef(null);
+  const heroRef = useRef<HTMLDivElement>(null);
+
   const { scrollYProgress: heroProgress } = useScroll({
     target: heroRef,
-    offset: ["start end", "end start"],
+    offset: ["start start", "end start"],
   });
-  const heroY = useTransform(heroProgress, [0, 1], ["-8%", "8%"]);
+  const heroImgY   = useTransform(heroProgress, [0, 1], ["0%", "22%"]);
+  const heroTextY  = useTransform(heroProgress, [0, 1], ["0%",  "7%"]);
+  const heroOpacity = useTransform(heroProgress, [0, 0.6], [1, 0]);
 
   return (
-    <DefaultPageLayout>
-      <div className="flex h-full w-full flex-col items-center">
-        <NavigationHeader
-          title="Pablo Parma"
-          navigation={
-            <>
-              <Link href="/works">
-                <LinkButton onClick={(event: React.MouseEvent<HTMLButtonElement>) => {}}>
-                  Work
-                </LinkButton>
-              </Link>
-              <Link href="/about">
-                <LinkButton
-                  variant="active"
-                  onClick={(event: React.MouseEvent<HTMLButtonElement>) => {}}
-                >
-                  About
-                </LinkButton>
-              </Link>
-              <Link href="/cv">
-                <LinkButton onClick={(event: React.MouseEvent<HTMLButtonElement>) => {}}>
-                  CV
-                </LinkButton>
-              </Link>
-            </>
-          }
-          logoppd={
-            <>
-              <Link href="/">
-                <div className="flex items-center gap-2">
-                  <img
-                    className="w-9 flex-none"
-                    src="https://res.cloudinary.com/subframe/image/upload/v1756584504/uploads/20526/c5wl89v9jqmlegnamrmo.svg"
-                    alt="Pablo Parma logo"
-                  />
-                </div>
-              </Link>
-              <Link href="/">
-                <div className="flex grow shrink-0 basis-0 flex-col items-start">
-                  <span className="text-heading-3 font-heading-3 text-default-font">
-                    Pablo Parma
-                  </span>
-                  <span className="w-full text-caption font-caption text-subtext-color">
-                    Product Designer
-                  </span>
-                </div>
-              </Link>
-            </>
-          }
-        />
+    <div className="flex h-full w-full flex-col items-center bg-default-background">
+      <NavigationHeader
+        title="Pablo Parma"
+        navigation={
+          <>
+            <Link href="/works">
+              <LinkButton onClick={(event: React.MouseEvent<HTMLButtonElement>) => {}}>
+                Work
+              </LinkButton>
+            </Link>
+            <Link href="/about">
+              <LinkButton
+                variant="active"
+                onClick={(event: React.MouseEvent<HTMLButtonElement>) => {}}
+              >
+                About
+              </LinkButton>
+            </Link>
+            <Link href="/cv">
+              <LinkButton onClick={(event: React.MouseEvent<HTMLButtonElement>) => {}}>
+                CV
+              </LinkButton>
+            </Link>
+          </>
+        }
+        logoppd={
+          <>
+            <Link href="/">
+              <div className="flex items-center gap-2">
+                <img
+                  className="w-9 flex-none"
+                  src="https://res.cloudinary.com/subframe/image/upload/v1756584504/uploads/20526/c5wl89v9jqmlegnamrmo.svg"
+                  alt="Pablo Parma logo"
+                />
+              </div>
+            </Link>
+            <Link href="/">
+              <div className="flex grow shrink-0 basis-0 flex-col items-start">
+                <span className="text-heading-3 font-heading-3 text-default-font">
+                  Pablo Parma
+                </span>
+                <span className="w-full text-caption font-caption text-subtext-color">
+                  Product Designer
+                </span>
+              </div>
+            </Link>
+          </>
+        }
+      />
 
-        <main className="container max-w-none flex w-full flex-col items-start gap-20 bg-default-background py-16">
+      {/* ── Hero ──────────────────────────────────────────────────────────── */}
+      <section
+        ref={heroRef}
+        className="relative w-full overflow-hidden"
+        style={{ minHeight: "92dvh" }}
+      >
+        {/* Two-col split */}
+        <div className="flex h-full" style={{ minHeight: "92dvh" }}>
 
-          {/* ── Intro ── */}
-          <section className="flex w-full flex-col gap-5 px-6 mobile:px-0">
-            {/* Eyebrow */}
-            <motion.p
-              className="text-caption font-caption text-subtext-color"
+          {/* Left: identity */}
+          <motion.div
+            className="relative z-10 flex flex-1 flex-col justify-center gap-10 px-14 py-20 mobile:px-6 mobile:py-12"
+            style={{ y: heroTextY, opacity: heroOpacity }}
+          >
+            {/* Metadata row */}
+            <motion.div
+              className="flex items-center gap-3 flex-wrap"
               initial={{ opacity: 0, x: -10 }}
               animate={{ opacity: 1, x: 0 }}
-              transition={{ duration: 0.45, ease: "easeOut" }}
+              transition={{ duration: 0.5, ease: "easeOut" }}
             >
-              Product Designer · Rosario, Argentina · Open to remote
-            </motion.p>
-
-            {/* Name — clip-path slide */}
-            <div className="overflow-hidden">
-              <motion.h1
-                className="text-heading-1 font-heading-1 text-brand-primary"
-                initial={{ y: "100%" }}
-                animate={{ y: "0%" }}
-                transition={{ type: "spring", stiffness: 55, damping: 18, delay: 0.1 }}
+              <span className="text-caption font-caption text-subtext-color uppercase tracking-widest">
+                Product Designer
+              </span>
+              <div className="w-px h-3 flex-none bg-neutral-border" />
+              <span className="text-caption font-caption text-subtext-color">
+                Rosario, Argentina
+              </span>
+              <div className="w-px h-3 flex-none bg-neutral-border" />
+              <span
+                className="text-caption font-caption"
+                style={{ color: "rgb(34, 197, 94)" }}
               >
-                Pablo Parma
-              </motion.h1>
+                ● Available
+              </span>
+            </motion.div>
+
+            {/* Name — oversized clip reveal */}
+            <div className="flex flex-col gap-0">
+              {["PABLO", "PARMA"].map((word, i) => (
+                <div key={word} className="overflow-hidden">
+                  <motion.span
+                    className="block font-heading-1 text-default-font leading-none select-none"
+                    style={{
+                      fontSize: "clamp(72px, 9.5vw, 136px)",
+                      letterSpacing: "-0.035em",
+                      fontWeight: 700,
+                    }}
+                    initial={{ y: "105%" }}
+                    animate={{ y: "0%" }}
+                    transition={{
+                      type: "spring",
+                      stiffness: 50,
+                      damping: 17,
+                      delay: 0.08 + i * 0.1,
+                    }}
+                  >
+                    {word}
+                  </motion.span>
+                </div>
+              ))}
             </div>
 
             {/* Bio */}
             <motion.div
-              className="flex flex-col gap-2 max-w-[640px]"
-              initial={{ opacity: 0, y: 14 }}
+              className="flex flex-col gap-3 max-w-[420px]"
+              initial={{ opacity: 0, y: 16 }}
               animate={{ opacity: 1, y: 0 }}
-              transition={{ type: "spring", stiffness: 55, damping: 20, delay: 0.22 }}
+              transition={{ type: "spring", stiffness: 50, damping: 20, delay: 0.38 }}
             >
-              <span
-                className="text-caption font-caption text-subtext-color"
-                style={{ textWrap: "pretty" } as React.CSSProperties}
+              <p
+                className="text-body font-body text-subtext-color"
+                style={{ lineHeight: 1.8, textWrap: "pretty" } as React.CSSProperties}
               >
-                I&apos;m a Product Designer with 10+ years of experience creating user-centered
-                digital experiences, proudly based in Argentina.
-              </span>
-              <span
-                className="text-caption-bold font-caption-bold text-default-font"
-                style={{ textWrap: "pretty" } as React.CSSProperties}
+                10+ years creating user-centered digital experiences,
+                proudly based in Argentina.
+              </p>
+              <p
+                className="text-body font-body text-default-font"
+                style={{ lineHeight: 1.8, textWrap: "pretty" } as React.CSSProperties}
               >
-                Beyond design, I&apos;m deeply passionate about photography — especially capturing
-                the landscapes and wildlife of my country. Patagonia is my constant source of
-                inspiration, and I often dream of one day calling it home.
-              </span>
+                Beyond design, deeply passionate about photography —
+                the landscapes and wildlife of Patagonia.
+              </p>
+              <Link href="/cv">
+                <motion.span
+                  className="inline-flex items-center gap-1 text-caption font-caption text-subtext-color mt-1"
+                  style={{ textDecoration: "underline", textUnderlineOffset: "4px" }}
+                  whileHover={{ x: 3 }}
+                  transition={{ type: "spring", stiffness: 400, damping: 17 }}
+                >
+                  Download CV ↗
+                </motion.span>
+              </Link>
             </motion.div>
-          </section>
+          </motion.div>
 
-          {/* ── Hero image with parallax ── */}
-          <section ref={heroRef} className="w-full overflow-hidden rounded-xl">
+          {/* Right: Patagonia image — parallax */}
+          <div className="relative flex-1 overflow-hidden mobile:hidden">
             <motion.img
-              style={{ y: heroY }}
-              className="w-full object-cover aspect-[16/7]"
               src="https://res.cloudinary.com/subframe/image/upload/v1756172560/uploads/20526/b3gp8ugog2wackvbix8e.jpg"
               alt="Patagonia landscape, Argentina"
-              initial={{ opacity: 0, scale: 1.04 }}
-              animate={{ opacity: 1, scale: 1 }}
-              transition={{ duration: 0.9, ease: "easeOut", delay: 0.1 }}
+              className="absolute inset-0 w-full h-full object-cover"
+              style={{ y: heroImgY, scale: 1.12, transformOrigin: "center top" }}
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ duration: 1.1, ease: "easeOut", delay: 0.15 }}
             />
-          </section>
+            {/* Subtle left-edge vignette to blend into background */}
+            <div
+              className="absolute inset-y-0 left-0 w-24 pointer-events-none"
+              style={{
+                background: "linear-gradient(to right, rgb(249,246,241), transparent)",
+              }}
+            />
+          </div>
+        </div>
 
-          {/* ── Masonry + text sections ── */}
-          <section className="flex w-full items-start gap-8 mobile:flex-col">
+        {/* Mobile: image below text */}
+        <motion.div
+          className="hidden mobile:block w-full overflow-hidden"
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ duration: 0.9, delay: 0.3 }}
+        >
+          <img
+            src="https://res.cloudinary.com/subframe/image/upload/v1756172560/uploads/20526/b3gp8ugog2wackvbix8e.jpg"
+            alt="Patagonia landscape, Argentina"
+            className="w-full object-cover"
+            style={{ aspectRatio: "4/3" }}
+          />
+        </motion.div>
+      </section>
 
-            {/* Left: photo masonry */}
-            <aside className="flex grow shrink-0 basis-0 items-start gap-3 mobile:hidden">
-              <MasonryColumn>
-                <MasonryItem
-                  src="https://res.cloudinary.com/subframe/image/upload/v1756173928/uploads/20526/yypeb07pkssolmvs6bgg.jpg"
-                  alt="Wildlife in Patagonia"
-                />
-                <MasonryItem
-                  src="https://res.cloudinary.com/subframe/image/upload/v1756173894/uploads/20526/rruqnipgugz43bytqrd5.jpg"
-                  alt="Patagonian landscape"
-                />
-                <MasonryItem
-                  src="https://res.cloudinary.com/subframe/image/upload/v1756234158/uploads/20526/aqshgjyzcqrisgcblewg.jpg"
-                  alt="Argentine nature"
-                />
-                <MasonryItem
-                  src="https://res.cloudinary.com/subframe/image/upload/v1756178574/uploads/20526/qxsrv8qsvhvl1zhocrdi.png"
-                  alt="Photography"
-                />
-                <MasonryItem
-                  src="https://res.cloudinary.com/subframe/image/upload/v1756178937/uploads/20526/iahgnwizz6h7o1ikfpjq.jpg"
-                  alt="Photography"
-                />
-                <MasonryItem
-                  src="https://res.cloudinary.com/subframe/image/upload/v1756233719/uploads/20526/bjmhblysoiu8mhvtodtl.jpg"
-                  alt="Photography"
-                />
-              </MasonryColumn>
+      {/* ── Content sections ─────────────────────────────────────────────── */}
+      <main className="w-full max-w-7xl mx-auto px-14 pb-24 mobile:px-6">
 
-              <MasonryColumn offsetTop>
-                <MasonryItem
-                  src="https://res.cloudinary.com/subframe/image/upload/v1756180179/uploads/20526/smxmph45zagrbetdlh5d.jpg"
-                  alt="Photography"
-                />
-                <MasonryItem
-                  src="https://res.cloudinary.com/subframe/image/upload/v1756178229/uploads/20526/thzrykbkdarteddmafoz.jpg"
-                  alt="Photography"
-                />
-                <MasonryItem
-                  src="https://res.cloudinary.com/subframe/image/upload/v1756174265/uploads/20526/sjukxo8taigev9wnicad.jpg"
-                  alt="Photography"
-                />
-                <MasonryItem src="/Recording 2024-05-04 184348.mp4" isVideo />
-                <MasonryItem
-                  src="https://res.cloudinary.com/subframe/image/upload/v1756736102/uploads/20526/thltoellxo4igbopwgee.jpg"
-                  alt="Photography"
-                />
-              </MasonryColumn>
-            </aside>
-
-            {/* Right: scrolling text sections */}
-            <div className="flex grow shrink-0 basis-0 flex-col items-start py-8 mobile:py-0">
-              <TextSection
-                index="01"
-                heading="What sets me apart?"
-                body="Whether I'm exploring nature, experimenting with new creative tools, or collaborating on design projects, I bring the same curiosity, dedication, and love for meaningful experiences that define both my personal and professional journey."
-                mobileImage="https://res.cloudinary.com/subframe/image/upload/v1756178229/uploads/20526/thzrykbkdarteddmafoz.jpg"
-              />
-              <TextSection
-                index="02"
-                heading="I'm resourceful"
-                body="More than 10 years as a designer has given me breadth across User Research, SEO, Digital Marketing, HTML and CSS, AR, 3D, and AI tools. I reach for whatever it takes to solve the problem well."
-                mobileImage="https://res.cloudinary.com/subframe/image/upload/v1756178574/uploads/20526/qxsrv8qsvhvl1zhocrdi.png"
-              />
-              <TextSection
-                index="03"
-                heading="I'm eager to experiment"
-                body="Not every project is equal. I regularly step outside my comfort zone and apply new ideas, methodologies, or processes to find what works. I can adapt — I'm always evolving."
-                mobileVideo="/Recording 2024-05-04 184348.mp4"
-              />
-              <TextSection
-                index="04"
-                heading="I'm always learning"
-                body="The UI/UX field never stops expanding — new tools, technologies, trends, methodologies. I consider myself a T-shaped Designer: broad across disciplines, deep where it matters most."
-                mobileImage="https://res.cloudinary.com/subframe/image/upload/v1756736102/uploads/20526/thltoellxo4igbopwgee.jpg"
-              />
-              <TextSection
-                index="05"
-                heading="I'm empathetic"
-                body="Understanding users' perspectives is the key to identifying real pain points. Being empathic as a habit also raises the quality of the work we put out — and the lives we lead."
-                mobileImage="https://res.cloudinary.com/subframe/image/upload/v1756180179/uploads/20526/smxmph45zagrbetdlh5d.jpg"
-              />
-            </div>
-          </section>
-        </main>
-
-        <Footer
-          createdWithText="Proudly created and coded using:"
-          tools={
-            <>
+        <AboutSection
+          index="01"
+          heading="What sets me apart?"
+          body="Whether I'm exploring nature, experimenting with new creative tools, or collaborating on design projects, I bring the same curiosity, dedication, and love for meaningful experiences that define both my personal and professional journey."
+          accent={
+            <motion.div
+              className="mt-2 overflow-hidden rounded-lg"
+              style={{ maxWidth: "260px" }}
+              whileHover={{ scale: 1.02 }}
+              transition={{ type: "spring", stiffness: 300, damping: 22 }}
+            >
               <img
-                className="w-4 flex-none"
-                src="https://res.cloudinary.com/subframe/image/upload/v1711417507/shared/y2rsnhq3mex4auk54aye.png"
-                alt="Subframe"
+                src="https://res.cloudinary.com/subframe/image/upload/v1756173928/uploads/20526/yypeb07pkssolmvs6bgg.jpg"
+                alt="Hummingbird — Patagonian wildlife"
+                className="w-full block"
               />
-              <span className="text-body font-body text-default-font">Subframe</span>
-              <span className="text-body font-body text-default-font">+</span>
-              <img
-                className="w-4 flex-none"
-                src="https://res.cloudinary.com/subframe/image/upload/v1755897676/uploads/20526/abte5rdrqheg9h0jl0ff.svg"
-                alt="Cursor"
-              />
-              <span className="text-body font-body text-default-font">Cursor</span>
-            </>
+            </motion.div>
           }
-          socialText="Find me on"
-          socialLinks={
-            <>
-              <FeatherLinkedin className="text-body font-body text-default-font" />
-              <Link
-                href="https://www.linkedin.com/in/pabloparma/"
-                target="_blank"
-                rel="noopener noreferrer"
-              >
-                <span className="text-body font-body text-default-font">LinkedIn</span>
-              </Link>
-              <div className="flex w-px flex-none flex-col items-center gap-2 self-stretch bg-neutral-border" />
-              <FeatherInstagram className="text-body font-body text-default-font" />
-              <Link
-                href="https://www.instagram.com/pabloparma/"
-                target="_blank"
-                rel="noopener noreferrer"
-              >
-                <span className="text-body font-body text-default-font">Instagram</span>
-              </Link>
-              <div className="flex w-px flex-none flex-col items-center gap-2 self-stretch bg-neutral-border" />
-              <FeatherSend className="text-body font-body text-default-font" />
-              <CopyEmail />
-            </>
-          }
-          copyright="© 2525 Pablo Parma"
         />
-      </div>
-    </DefaultPageLayout>
+
+        <AboutSection
+          index="02"
+          heading="I'm resourceful"
+          body="More than 10 years as a designer has given me breadth across User Research, SEO, Digital Marketing, HTML and CSS, AR, 3D, and AI tools. I reach for whatever it takes to solve the problem well."
+        />
+
+        <AboutSection
+          index="03"
+          heading="I'm eager to experiment"
+          body="Not every project is equal. I regularly step outside my comfort zone and apply new ideas, methodologies, or processes to find what works. I can adapt — I'm always evolving."
+        />
+
+        <AboutSection
+          index="04"
+          heading="I'm always learning"
+          body="The UI/UX field never stops expanding — new tools, technologies, trends, methodologies. I consider myself a T-shaped Designer: broad across disciplines, deep where it matters most."
+        />
+
+        <AboutSection
+          index="05"
+          heading="I'm empathetic"
+          body="Understanding users' perspectives is the key to identifying real pain points. Being empathic as a habit also raises the quality of the work we put out — and the lives we lead."
+        />
+
+        <AnimLine />
+      </main>
+
+      {/* ── Footer ──────────────────────────────────────────────────────────── */}
+      <Footer
+        createdWithText="Proudly created and coded using:"
+        tools={
+          <>
+            <img
+              className="w-4 flex-none"
+              src="https://res.cloudinary.com/subframe/image/upload/v1711417507/shared/y2rsnhq3mex4auk54aye.png"
+              alt="Subframe"
+            />
+            <span className="text-body font-body text-default-font">Subframe</span>
+            <span className="text-body font-body text-default-font">+</span>
+            <img
+              className="w-4 flex-none"
+              src="https://res.cloudinary.com/subframe/image/upload/v1755897676/uploads/20526/abte5rdrqheg9h0jl0ff.svg"
+              alt="Cursor"
+            />
+            <span className="text-body font-body text-default-font">Cursor</span>
+          </>
+        }
+        socialText="Find me on"
+        socialLinks={
+          <>
+            <FeatherLinkedin className="text-body font-body text-default-font" />
+            <Link href="https://www.linkedin.com/in/pabloparma/" target="_blank" rel="noopener noreferrer">
+              <span className="text-body font-body text-default-font">LinkedIn</span>
+            </Link>
+            <div className="flex w-px flex-none flex-col items-center gap-2 self-stretch bg-neutral-border" />
+            <FeatherInstagram className="text-body font-body text-default-font" />
+            <Link href="https://www.instagram.com/pabloparma/" target="_blank" rel="noopener noreferrer">
+              <span className="text-body font-body text-default-font">Instagram</span>
+            </Link>
+            <div className="flex w-px flex-none flex-col items-center gap-2 self-stretch bg-neutral-border" />
+            <FeatherSend className="text-body font-body text-default-font" />
+            <CopyEmail />
+          </>
+        }
+        copyright="© 2025 Pablo Parma"
+      />
+    </div>
   );
 }
 
