@@ -14,11 +14,11 @@ export default function RootLayout({
   return (
     <html lang="en">
 <head>
-  {/* Google Fonts — Syne (headings) + Space Mono (body/UI) */}
+  {/* Google Fonts — Chakra Petch (headings) + IBM Plex Mono (body/UI) */}
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
   <link
-    href="https://fonts.googleapis.com/css2?family=Syne:wght@700;800&family=Space+Mono:ital,wght@0,400;0,700;1,400&display=swap"
+    href="https://fonts.googleapis.com/css2?family=Chakra+Petch:ital,wght@0,600;0,700;1,600&family=IBM+Plex+Mono:ital,wght@0,400;0,500;0,700;1,400&display=swap"
     rel="stylesheet"
   />
 

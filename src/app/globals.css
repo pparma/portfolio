@@ -3,7 +3,7 @@
 @tailwind utilities;
 
 html {
-  font-family: "Space Mono", monospace;
+  font-family: "IBM Plex Mono", monospace;
   height: 100vh;
   display: flex;
   flex-direction: column;
