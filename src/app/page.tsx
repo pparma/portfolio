@@ -1,7 +1,6 @@
 "use client";
 
 import React, { useRef, useEffect, useState } from "react";
-import { CaseStudyCard } from "@/ui/components/CaseStudyCard";
 import { Footer } from "@/ui/components/Footer";
 import { LinkButton } from "@/ui/components/LinkButton";
 import { NavigationHeader } from "@/ui/components/NavigationHeader";
@@ -105,35 +104,114 @@ function ScrollVideoHero() {
   );
 }
 
-/* ─── Animated case study card ────────────────────────────────────────────── */
 
-function AnimatedCard({
-  children,
+/* ─── Folder-style work card ──────────────────────────────────────────────── */
+
+function WorkCard({
   index,
+  number,
+  title,
+  subtitle,
+  href,
+  dark = false,
 }: {
-  children: React.ReactNode;
   index: number;
+  number: string;
+  title: string;
+  subtitle: string;
+  href: string;
+  dark?: boolean;
 }) {
   const ref = useRef(null);
   const isInView = useInView(ref, { once: true, margin: "-60px" });
 
+  const bg      = dark ? "rgb(17, 17, 17)"         : "rgb(228, 222, 215)";
+  const tabBg   = dark ? "rgb(30, 31, 38)"          : "rgb(213, 206, 198)";
+  const text    = dark ? "rgb(249, 246, 241)"       : "rgb(23, 23, 23)";
+  const sub     = dark ? "rgba(249,246,241,0.50)"   : "rgb(115, 115, 115)";
+  const num     = dark ? "rgba(249,246,241,0.20)"   : "rgba(23,23,23,0.18)";
+
   return (
     <motion.div
       ref={ref}
-      initial={{ opacity: 0, y: 32 }}
+      initial={{ opacity: 0, y: 36 }}
       animate={isInView ? { opacity: 1, y: 0 } : {}}
-      transition={{
-        type: "spring" as const,
-        stiffness: 60,
-        damping: 20,
-        delay: index * 0.08,
-      }}
-      whileHover={{
-        y: -6,
-        transition: { type: "spring" as const, stiffness: 400, damping: 20 },
-      }}
+      transition={{ type: "spring" as const, stiffness: 55, damping: 20, delay: index * 0.1 }}
+      whileHover={{ y: -8, transition: { type: "spring" as const, stiffness: 380, damping: 22 } }}
+      style={{ cursor: "pointer", paddingTop: "10px" /* room for the tab */ }}
     >
-      {children}
+      <Link href={href}>
+        <div style={{ position: "relative" }}>
+          {/* Folder tab — sits flush above the top-left corner */}
+          <div
+            style={{
+              position: "absolute",
+              top: 0,
+              left: 0,
+              width: "68px",
+              height: "10px",
+              backgroundColor: tabBg,
+              borderRadius: "5px 5px 0 0",
+              transform: "translateY(-100%)",
+            }}
+          />
+
+          {/* Card body — top-left corner is flat (folder edge) */}
+          <div
+            style={{
+              backgroundColor: bg,
+              borderRadius: "0 18px 18px 18px",
+              padding: "24px 26px 26px",
+              minHeight: "280px",
+              display: "flex",
+              flexDirection: "column",
+              justifyContent: "space-between",
+              gap: "32px",
+            }}
+          >
+            {/* Number — top right */}
+            <div style={{ display: "flex", justifyContent: "flex-end" }}>
+              <span
+                style={{
+                  color: num,
+                  fontSize: "13px",
+                  letterSpacing: "0.05em",
+                  fontWeight: 500,
+                  fontVariantNumeric: "tabular-nums",
+                }}
+              >
+                {number}
+              </span>
+            </div>
+
+            {/* Text — bottom */}
+            <div style={{ display: "flex", flexDirection: "column", gap: "8px" }}>
+              <span
+                style={{
+                  color: text,
+                  fontSize: "clamp(16px, 1.35vw, 21px)",
+                  fontWeight: 700,
+                  lineHeight: 1.2,
+                  letterSpacing: "-0.02em",
+                  textWrap: "pretty",
+                } as React.CSSProperties}
+              >
+                {title}
+              </span>
+              <span
+                style={{
+                  color: sub,
+                  fontSize: "13px",
+                  lineHeight: 1.6,
+                  textWrap: "pretty",
+                } as React.CSSProperties}
+              >
+                {subtitle}
+              </span>
+            </div>
+          </div>
+        </div>
+      </Link>
     </motion.div>
   );
 }
@@ -310,72 +388,62 @@ function Index() {
           className="flex w-full flex-col items-start py-20 px-6"
           style={{ minHeight: "100dvh" }}
         >
-          <div className="max-w-7xl mx-auto w-full flex flex-col items-start gap-8">
-            <motion.span
-              className="text-headling-4 font-headling-4 text-default-font"
-              initial={{ opacity: 0, y: 16 }}
-              whileInView={{ opacity: 1, y: 0 }}
+          <div className="max-w-7xl mx-auto w-full flex flex-col items-start gap-2">
+
+            {/* Section header — + accent left, label right */}
+            <motion.div
+              className="w-full flex items-center justify-between"
+              initial={{ opacity: 0 }}
+              whileInView={{ opacity: 1 }}
               viewport={{ once: true, margin: "-40px" }}
-              transition={{
-                type: "spring" as const,
-                stiffness: 80,
-                damping: 20,
-              }}
+              transition={{ duration: 0.45, ease: "easeOut" }}
             >
-              Selected Work
-            </motion.span>
+              <span
+                style={{
+                  color: "rgb(232, 80, 0)",
+                  fontSize: "22px",
+                  fontWeight: 700,
+                  lineHeight: 1,
+                  userSelect: "none",
+                }}
+              >
+                +
+              </span>
+              <span className="text-caption font-caption text-subtext-color uppercase tracking-widest">
+                Selected Work
+              </span>
+            </motion.div>
 
-            <div className="w-full grid grid-cols-3 gap-6 mobile:grid-cols-1">
-              <AnimatedCard index={0}>
-                <Link href="/case-study-bh">
-                  <CaseStudyCard
-                    image="https://res.cloudinary.com/subframe/image/upload/v1755615333/uploads/20526/pumv86xcpadow3apfydy.png"
-                    title="Simplifying Operations for BridgeHaul"
-                    subtitle="Revolutionizing freight with a redesigned mobile app."
-                    preview={
-                      <img
-                        className="flex-none transition-transform duration-300 hover:scale-110"
-                        src="https://res.cloudinary.com/subframe/image/upload/v1755615333/uploads/20526/pumv86xcpadow3apfydy.png"
-                        alt="BridgeHaul case study"
-                      />
-                    }
-                  />
-                </Link>
-              </AnimatedCard>
+            {/* Divider */}
+            <div className="w-full h-px bg-neutral-border mb-6" />
 
-              <AnimatedCard index={1}>
-                <Link href="/case-study-yappa">
-                  <CaseStudyCard
-                    image="https://res.cloudinary.com/subframe/image/upload/v1755615333/uploads/20526/pumv86xcpadow3apfydy.png"
-                    title="Humanizing online rating discussions through Voice & Video UX"
-                    subtitle="UX flows and a modular design system enabling publishers to embed social interaction on their platforms."
-                    preview={
-                      <img
-                        className="flex-none transition-transform duration-300 hover:scale-110"
-                        src="https://res.cloudinary.com/subframe/image/upload/v1756048947/uploads/20526/yizdabjt8n9aute45cop.png"
-                        alt="Yappa case study"
-                      />
-                    }
-                  />
-                </Link>
-              </AnimatedCard>
-
-              <AnimatedCard index={2}>
-                <Link href="/case-study-docsnap">
-                  <CaseStudyCard
-                    image="https://res.cloudinary.com/subframe/image/upload/v1755615333/uploads/20526/pumv86xcpadow3apfydy.png"
-                    title="AI-driven platform for legal management"
-                    subtitle="A streamlined, user-friendly platform for intelligent document management."
-                    preview={
-                      <img
-                        className="flex-none transition-transform duration-300 hover:scale-110"
-                        src="https://res.cloudinary.com/subframe/image/upload/v1755616223/uploads/20526/s4zctt7znm22wkvnu0oe.png"
-                        alt="Docsnap case study"
-                      />
-                    }
-                  />
-                </Link>
-              </AnimatedCard>
+            {/* Cards grid — extra top padding lets folder tabs breathe */}
+            <div
+              className="w-full grid grid-cols-3 gap-4 mobile:grid-cols-1"
+              style={{ paddingTop: "12px" }}
+            >
+              <WorkCard
+                index={0}
+                number="01/"
+                title="Simplifying Operations for BridgeHaul"
+                subtitle="Revolutionizing freight with a redesigned mobile app."
+                href="/case-study-bh"
+              />
+              <WorkCard
+                index={1}
+                number="02/"
+                title="Humanizing online rating discussions through Voice & Video UX"
+                subtitle="UX flows and a modular design system for publishers."
+                href="/case-study-yappa"
+              />
+              <WorkCard
+                index={2}
+                number="03/"
+                title="AI-driven platform for legal management"
+                subtitle="A streamlined, user-friendly platform for intelligent document management."
+                href="/case-study-docsnap"
+                dark
+              />
             </div>
           </div>
         </section>
