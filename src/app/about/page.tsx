@@ -198,48 +198,21 @@ function About() {
               className="w-full mx-auto flex items-center px-14 mobile:px-6"
               style={{ maxWidth: "1440px", height: "100%", paddingBottom: "22vh" }}
             >
-            {/* Outer wrapper — animates the whole folder card as one unit */}
             <motion.div
+              className="flex flex-col gap-5 p-8 mobile:p-6"
               style={{
-                position: "relative",
+                backgroundColor: "rgba(249, 246, 241, 0.30)",
+                backdropFilter: "blur(28px)",
+                WebkitBackdropFilter: "blur(28px)",
+                border: "1px solid rgba(249, 246, 241, 0.45)",
+                borderRadius: "16px",
                 maxWidth: "580px",
                 width: "100%",
-                paddingTop: "14px", /* room for the folder tab */
               }}
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.8, ease: "easeOut", delay: 0.5 }}
             >
-              {/* Folder tab — same frosted glass as the card body */}
-              <div
-                style={{
-                  position: "absolute",
-                  top: "14px",
-                  left: 0,
-                  width: "88px",
-                  height: "14px",
-                  backgroundColor: "rgba(249, 246, 241, 0.30)",
-                  backdropFilter: "blur(28px)",
-                  WebkitBackdropFilter: "blur(28px)",
-                  border: "1px solid rgba(249, 246, 241, 0.45)",
-                  borderBottom: "none",
-                  borderRadius: "7px 7px 0 0",
-                  transform: "translateY(-100%)",
-                }}
-              />
-
-              {/* Card body — flat top-left corner where the tab connects */}
-              <div
-                className="flex flex-col gap-5 p-8 mobile:p-6"
-                style={{
-                  backgroundColor: "rgba(249, 246, 241, 0.30)",
-                  backdropFilter: "blur(28px)",
-                  WebkitBackdropFilter: "blur(28px)",
-                  border: "1px solid rgba(249, 246, 241, 0.45)",
-                  borderRadius: "0 16px 16px 16px",
-                  width: "100%",
-                }}
-              >
               {/* Metadata */}
               <motion.div
                 className="flex items-center gap-2 flex-wrap"
@@ -319,8 +292,7 @@ function About() {
                   </motion.span>
                 </Link>
               </motion.div>
-              </div>{/* end card body */}
-            </motion.div>{/* end folder wrapper */}
+            </motion.div>
             </div>
           </div>
         </div>
