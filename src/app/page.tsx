@@ -107,11 +107,11 @@ function ScrollVideoHero() {
 
 /* ─── Folder-style work card ──────────────────────────────────────────────── */
 
-/* Folder shape path — from filefoldershape.svg
-   viewBox 0 0 514 514 (square).
-   Tab sits top-left; diagonal ramp at ~36% width; right shelf flat at y=62 (~12%). */
-const FOLDER_PATH =
-  "M0 24C0 10.7452 10.7452 0 24 0H184.615C190.947 0 197.022 2.50218 201.518 6.96142L242.965 48.0771C251.955 56.9956 264.106 62 276.769 62H490C503.255 62 514 72.7452 514 86V490C514 503.255 503.255 514 490 514H24C10.7452 514 0 503.255 0 490V24Z";
+/* Folder header path — from folder-top.svg (864×104).
+   Wide landscape tab: curved ramp at ~30% width, rounded corner on right shelf.
+   Used as the card's header; a rectangle body extends below. */
+const FOLDER_TOP_PATH =
+  "M0 24C0 10.7452 10.7452 0 24 0H254.615C260.947 0 267.022 2.50218 271.518 6.96142L312.965 48.0771C321.955 56.9956 334.106 62 346.769 62H840C853.255 62 864 72.7452 864 86V104H0L0 24Z";
 
 function WorkCard({
   index,
@@ -146,69 +146,69 @@ function WorkCard({
       style={{ cursor: "pointer" }}
     >
       <Link href={href}>
-        <div style={{ position: "relative" }}>
-          {/* Authentic folder shape — SVG scales 1:1 (square card) */}
-          <svg
-            viewBox="0 0 514 514"
-            width="100%"
-            aria-hidden="true"
-            style={{ display: "block" }}
-          >
-            <path d={FOLDER_PATH} fill={fill} />
-          </svg>
+        {/* Folder header — SVG tab shape, scales to full card width */}
+        <svg
+          viewBox="0 0 864 104"
+          width="100%"
+          aria-hidden="true"
+          style={{ display: "block" }}
+        >
+          <path d={FOLDER_TOP_PATH} fill={fill} />
+        </svg>
 
-          {/* Content — overlaid, top padding clears the tab shelf (~12% + gutter) */}
-          <div
-            style={{
-              position: "absolute",
-              inset: 0,
-              display: "flex",
-              flexDirection: "column",
-              justifyContent: "space-between",
-              padding: "clamp(14px, 5.5%, 28px)",
-              paddingTop: "calc(13.5% + 4px)",
-            }}
-          >
-            {/* Number — sits in the right-side shelf of the tab row */}
-            <div style={{ display: "flex", justifyContent: "flex-end" }}>
-              <span
-                style={{
-                  color: num,
-                  fontSize: "13px",
-                  letterSpacing: "0.05em",
-                  fontWeight: 500,
-                  fontVariantNumeric: "tabular-nums",
-                }}
-              >
-                {number}
-              </span>
-            </div>
+        {/* Card body — rectangle that starts exactly where the SVG ends */}
+        <div
+          style={{
+            backgroundColor: fill,
+            borderRadius: "0 0 18px 18px",
+            padding: "16px 24px 28px",
+            marginTop: "-1px", /* seal any sub-pixel gap */
+            minHeight: "160px",
+            display: "flex",
+            flexDirection: "column",
+            justifyContent: "space-between",
+            gap: "24px",
+          }}
+        >
+          {/* Number — top right */}
+          <div style={{ display: "flex", justifyContent: "flex-end" }}>
+            <span
+              style={{
+                color: num,
+                fontSize: "13px",
+                letterSpacing: "0.05em",
+                fontWeight: 500,
+                fontVariantNumeric: "tabular-nums",
+              }}
+            >
+              {number}
+            </span>
+          </div>
 
-            {/* Text — anchored to bottom */}
-            <div style={{ display: "flex", flexDirection: "column", gap: "8px" }}>
-              <span
-                style={{
-                  color: text,
-                  fontSize: "clamp(15px, 1.25vw, 20px)",
-                  fontWeight: 700,
-                  lineHeight: 1.2,
-                  letterSpacing: "-0.02em",
-                  textWrap: "pretty",
-                } as React.CSSProperties}
-              >
-                {title}
-              </span>
-              <span
-                style={{
-                  color: sub,
-                  fontSize: "13px",
-                  lineHeight: 1.6,
-                  textWrap: "pretty",
-                } as React.CSSProperties}
-              >
-                {subtitle}
-              </span>
-            </div>
+          {/* Text — bottom */}
+          <div style={{ display: "flex", flexDirection: "column", gap: "8px" }}>
+            <span
+              style={{
+                color: text,
+                fontSize: "clamp(15px, 1.25vw, 20px)",
+                fontWeight: 700,
+                lineHeight: 1.2,
+                letterSpacing: "-0.02em",
+                textWrap: "pretty",
+              } as React.CSSProperties}
+            >
+              {title}
+            </span>
+            <span
+              style={{
+                color: sub,
+                fontSize: "13px",
+                lineHeight: 1.6,
+                textWrap: "pretty",
+              } as React.CSSProperties}
+            >
+              {subtitle}
+            </span>
           </div>
         </div>
       </Link>
