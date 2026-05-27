@@ -172,22 +172,32 @@ function About() {
         {/* Fixed hero — completely static, behind everything */}
         <div
           className="fixed top-0 left-0 right-0 w-full overflow-hidden"
-          style={{ height: "100dvh", zIndex: 1 }}
+          style={{ height: "100dvh", zIndex: 1, backgroundColor: "#F9F6F1" }}
         >
           {/* Background image — flipped horizontally for composition */}
           <motion.div
             className="absolute inset-0"
             initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
+            animate={{ opacity: 0.75 }}
             transition={{ duration: 1.3, ease: "easeOut" }}
           >
             <img
               src="https://res.cloudinary.com/subframe/image/upload/v1756172560/uploads/20526/b3gp8ugog2wackvbix8e.jpg"
               alt="Patagonia landscape, Argentina"
               className="w-full h-full object-cover"
-              style={{ transform: "scaleX(-1)", transformOrigin: "center center" }}
+              style={{ transform: "scaleX(-1)", transformOrigin: "center center", filter: "saturate(0%) contrast(1.25)" }}
             />
           </motion.div>
+
+          {/* Multiply burn overlay — sibling to image so blend mode reaches the actual bg */}
+          <div
+            className="absolute inset-0 pointer-events-none"
+            style={{
+              backgroundColor: "#8B7355",
+              mixBlendMode: "multiply",
+              opacity: 0.35,
+            } as React.CSSProperties}
+          />
 
           {/* Frosted glass card — inside a centered max-width container */}
           <div

@@ -143,27 +143,27 @@ function WorkCard({
       animate={isInView ? { opacity: 1, y: 0 } : {}}
       transition={{ type: "spring" as const, stiffness: 55, damping: 20, delay: index * 0.1 }}
       whileHover={{ y: -8, transition: { type: "spring" as const, stiffness: 380, damping: 22 } }}
-      style={{ cursor: "pointer" }}
+      style={{ cursor: "pointer", height: "100%" }}
     >
-      <Link href={href}>
+      <Link href={href} style={{ display: "flex", flexDirection: "column", height: "100%" }}>
         {/* Folder header — SVG tab shape, scales to full card width */}
         <svg
           viewBox="0 0 864 104"
           width="100%"
           aria-hidden="true"
-          style={{ display: "block" }}
+          style={{ display: "block", flexShrink: 0 }}
         >
           <path d={FOLDER_TOP_PATH} fill={fill} />
         </svg>
 
-        {/* Card body — rectangle that starts exactly where the SVG ends */}
+        {/* Card body — grows to fill remaining cell height */}
         <div
           style={{
             backgroundColor: fill,
             borderRadius: "0 0 18px 18px",
             padding: "16px 24px 28px",
             marginTop: "-1px", /* seal any sub-pixel gap */
-            minHeight: "160px",
+            flexGrow: 1,
             display: "flex",
             flexDirection: "column",
             justifyContent: "space-between",
@@ -230,6 +230,7 @@ function Index() {
   // Becomes fully opaque by the time 25% of the wrapper has scrolled past —
   // that maps to ~80% of the actual slide-in movement.
   const heroBgOpacity = useTransform(heroScrollProgress, [0, 0.25], [0, 1]);
+  const linesBgOpacity = useTransform(heroScrollProgress, [0, 0.25], [0, 0.45]);
 
   return (
     <div className="flex h-full w-full flex-col items-center bg-default-background">
@@ -299,7 +300,21 @@ function Index() {
             style={{ backgroundColor: "rgb(249, 246, 241)", opacity: heroBgOpacity }}
           />
 
-          <div className="relative max-w-7xl mx-auto w-full flex flex-col items-start gap-8 px-14 mobile:px-6">
+          {/* Lines texture — fixed so it stays pinned while content scrolls over it */}
+          <motion.img
+            src="/linesbg.svg"
+            aria-hidden="true"
+            className="fixed top-0 left-0 pointer-events-none select-none"
+            style={{
+              width: "100%",
+              height: "100dvh",
+              objectFit: "cover",
+              objectPosition: "center",
+              opacity: linesBgOpacity,
+            }}
+          />
+
+          <div className="relative z-10 max-w-7xl mx-auto w-full flex flex-col items-start gap-8 px-14 mobile:px-6">
             <motion.p
               className="text-caption font-caption text-subtext-color"
               initial={{ opacity: 0, y: 10 }}
@@ -379,10 +394,10 @@ function Index() {
         </div>
       </div>
 
-      {/* ── Selected Work — overlays hero, full viewport height ── */}
+      {/* ── Selected Work — overlays hero, transparent so lines show through ── */}
       <div
         className="relative w-full"
-        style={{ zIndex: 30, background: "rgb(249, 246, 241)" }}
+        style={{ zIndex: 30 }}
       >
         <section
           className="flex w-full flex-col items-start py-20 px-6"

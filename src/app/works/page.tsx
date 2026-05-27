@@ -120,7 +120,7 @@ function Works() {
           }
         />
 
-        <main className="container max-w-none flex w-full flex-col items-start gap-16 bg-default-background py-16">
+        <main className="container max-w-none flex w-full flex-col items-start gap-16 bg-default-background pb-16 pt-[86px]">
 
           {/* ── Page header ── */}
           <section ref={headingRef} className="flex w-full flex-col gap-5 px-2">

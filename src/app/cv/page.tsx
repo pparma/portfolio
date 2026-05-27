@@ -16,10 +16,11 @@ import Link from "next/link";
 import CopyEmail from "@/src/components/CopyEmail";
 
 
-/* Folder shape path — same as homepage cards (filefoldershape.svg).
-   Used with preserveAspectRatio="none" so it stretches to any card size. */
-const FOLDER_PATH =
-  "M0 24C0 10.7452 10.7452 0 24 0H184.615C190.947 0 197.022 2.50218 201.518 6.96142L242.965 48.0771C251.955 56.9956 264.106 62 276.769 62H490C503.255 62 514 72.7452 514 86V490C514 503.255 503.255 514 490 514H24C10.7452 514 0 503.255 0 490V24Z";
+/* Folder tab path — 8px top-left radius + diagonal ramp. Sits above the card body. */
+const DIAGONAL_TAB_PATH =
+  "M0 8C0 3.58172 3.58172 0 8 0H254.115C260.447 0 266.522 2.50217 271.018 6.96142L312.465 48.0771C321.455 56.9956 333.606 62 346.269 62H352.5H0V8Z";
+
+const CARD_COLOR = "rgb(255, 255, 255)";
 
 function FolderCard({
   children,
@@ -31,22 +32,26 @@ function FolderCard({
   innerClassName?: string;
 }) {
   return (
-    <div className={`relative w-full ${className}`}>
-      {/* Folder shape — absolutely fills the card at any width/height */}
+    <div className={`w-full ${className}`} style={{ isolation: "isolate" }}>
+      {/* Diagonal tab — fixed-size, top-left, same color as card body */}
       <svg
-        viewBox="0 0 514 514"
-        width="100%"
-        height="100%"
-        preserveAspectRatio="none"
+        viewBox="0 0 353 62"
+        width="103"
+        height="18"
         aria-hidden="true"
-        style={{ position: "absolute", top: 0, left: 0, display: "block" }}
+        style={{ display: "block", flexShrink: 0 }}
       >
-        <path d={FOLDER_PATH} fill="rgb(228, 222, 215)" />
+        <path d={DIAGONAL_TAB_PATH} fill={CARD_COLOR} />
       </svg>
-      {/* Content sits above the SVG */}
+      {/* Card body — rectangle, top-left corner flat to meet the tab */}
       <div
-        className={`relative flex w-full flex-col items-start px-6 py-6 ${innerClassName}`}
-        style={{ zIndex: 1 }}
+        className={`flex w-full flex-col items-start px-6 py-6 ${innerClassName}`}
+        style={{
+          backgroundColor: CARD_COLOR,
+          borderRadius: "0 8px 8px 8px",
+          marginTop: "-1px",
+          overflow: "hidden",
+        }}
       >
         {children}
       </div>
@@ -102,7 +107,7 @@ function Cv() {
                 </>
           }
         />
-        <div className="container max-w-none flex w-full flex-col items-center gap-16 bg-default-background py-12">
+        <div className="container max-w-none flex w-full flex-col items-center gap-16 bg-default-background pb-12 pt-[86px]">
           <div className="flex w-full items-start justify-center gap-8 mobile:flex-col mobile:flex-nowrap mobile:gap-8">
             <div className="flex min-w-[256px] flex-col items-start gap-4">
               <div className="flex w-52 flex-col items-center justify-center overflow-hidden rounded-full">
