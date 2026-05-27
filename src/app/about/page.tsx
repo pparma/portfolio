@@ -205,7 +205,8 @@ function About() {
                 backdropFilter: "blur(28px)",
                 WebkitBackdropFilter: "blur(28px)",
                 border: "1px solid rgba(249, 246, 241, 0.45)",
-                borderRadius: "16px",
+                /* diagonal cut on the top-left corner — same family as the folder cards */
+                clipPath: "polygon(26px 0%, 100% 0%, 100% 100%, 0% 100%, 0% 26px)",
                 maxWidth: "580px",
                 width: "100%",
               }}
