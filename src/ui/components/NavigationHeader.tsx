@@ -61,7 +61,7 @@ const NavigationHeaderRoot = React.forwardRef<
       animate={{ y: hidden ? "-100%" : "0%" }}
       transition={{ type: "spring", stiffness: 300, damping: 32, mass: 0.8 }}
       ref={ref}
-      {...otherProps}
+      {...(otherProps as any)}
     >
       {logoppd ? (
         <div className="flex grow shrink-0 basis-0 items-center gap-2">
