@@ -23,17 +23,13 @@ const DefaultPageLayoutRoot = React.forwardRef<
   return (
     <div
       className={SubframeUtils.twClassNames(
-        "flex h-screen w-full items-start",
+        "flex min-h-screen w-full flex-col items-start bg-default-background",
         className
       )}
       ref={ref}
       {...otherProps}
     >
-      {children ? (
-        <div className="flex grow shrink-0 basis-0 flex-col items-start gap-4 self-stretch overflow-y-auto bg-default-background">
-          {children}
-        </div>
-      ) : null}
+      {children}
     </div>
   );
 });

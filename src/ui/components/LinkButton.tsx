@@ -36,10 +36,11 @@ const LinkButtonRoot = React.forwardRef<HTMLButtonElement, LinkButtonRootProps>(
     return (
       <button
         className={SubframeUtils.twClassNames(
-          "group/a4ee726a flex cursor-pointer items-center gap-1 border-none bg-transparent",
+          "group/a4ee726a flex cursor-pointer items-center gap-1 border-none bg-transparent border-b border-solid border-transparent transition-[border-color] duration-200",
           {
             "flex-row flex-nowrap gap-1": size === "large",
-            "border-b border-solid border-accent": variant === "active",
+            "border-accent": variant === "active",
+            "hover:border-neutral-400": variant === "neutral",
           },
           className
         )}

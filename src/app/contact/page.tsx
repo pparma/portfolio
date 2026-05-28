@@ -5,6 +5,7 @@ import { NavigationHeader } from "@/ui/components/NavigationHeader";
 import { LinkButton } from "@/ui/components/LinkButton";
 import Link from "next/link";
 import { motion, AnimatePresence } from "framer-motion";
+import { CTAButton } from "@/src/components/CTAButton";
 
 /* ─── Math captcha generator ─────────────────────────────────────────────── */
 function makeCaptcha() {
@@ -132,8 +133,8 @@ export default function ContactPage() {
             <Link href="/works">
               <LinkButton onClick={() => {}}>Work</LinkButton>
             </Link>
-            <Link href="/about">
-              <LinkButton onClick={() => {}}>About</LinkButton>
+            <Link href="/ai">
+              <LinkButton onClick={() => {}}>AI Experiments</LinkButton>
             </Link>
             <Link href="/cv">
               <LinkButton onClick={() => {}}>CV</LinkButton>
@@ -161,7 +162,7 @@ export default function ContactPage() {
         }
       />
 
-      <main className="w-full max-w-7xl mx-auto px-14 mobile:px-6 py-24">
+      <main className="w-full max-w-7xl mx-auto px-14 mobile:px-6 pb-24 pt-[110px]">
         <div className="grid grid-cols-[1fr_1fr] gap-24 mobile:grid-cols-1 mobile:gap-12">
 
           {/* ── Left — heading + copy ── */}
@@ -333,24 +334,14 @@ export default function ContactPage() {
                     )}
                   </AnimatePresence>
 
-                  <motion.button
+                  <CTAButton
+                    variant="accent"
                     type="submit"
                     disabled={status === "sending"}
-                    className="self-start flex items-center gap-3 px-8 py-4 text-caption font-caption uppercase tracking-widest"
-                    style={{
-                      backgroundColor: "var(--color-accent)",
-                      color: "rgb(255, 255, 255)",
-                      borderRadius: "999px",
-                      border: "none",
-                      cursor: status === "sending" ? "not-allowed" : "pointer",
-                      opacity: status === "sending" ? 0.6 : 1,
-                    }}
-                    whileHover={status !== "sending" ? { scale: 1.03 } : {}}
-                    whileTap={status !== "sending" ? { scale: 0.97 } : {}}
-                    transition={{ type: "spring", stiffness: 400, damping: 20 }}
+                    className="self-start"
                   >
                     {status === "sending" ? "Sending…" : "Send message"}
-                  </motion.button>
+                  </CTAButton>
                 </motion.form>
               )}
             </AnimatePresence>

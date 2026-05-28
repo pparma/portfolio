@@ -55,7 +55,7 @@ const NavigationHeaderRoot = React.forwardRef<
   return (
     <motion.div
       className={SubframeUtils.twClassNames(
-        "flex w-full items-center gap-2 border-b border-solid border-neutral-border bg-default-background px-8 mobile:px-4 py-4 fixed top-0 left-0 right-0 z-50 bg-blend-screen backdrop-blur-xl bg-opacity-30",
+        "flex w-full items-center gap-2 bg-default-background/20 px-8 mobile:px-4 py-4 fixed top-0 left-0 right-0 z-50 backdrop-blur-2xl",
         className
       )}
       animate={{ y: hidden ? "-100%" : "0%" }}

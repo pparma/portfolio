@@ -2,7 +2,6 @@
 
 import React from "react";
 import { Button } from "@/ui/components/Button";
-import { Footer } from "@/ui/components/Footer";
 import { LinkButton } from "@/ui/components/LinkButton";
 import { NavigationHeader } from "@/ui/components/NavigationHeader";
 import { DefaultPageLayout } from "@/ui/layouts/DefaultPageLayout";
@@ -11,7 +10,7 @@ import { FeatherInstagram } from "@subframe/core";
 import { FeatherLinkedin } from "@subframe/core";
 import { FeatherSend } from "@subframe/core";
 import Link from "next/link";
-import CopyEmail from "@/src/components/CopyEmail";
+import { SiteFooter } from "@/src/components/SiteFooter";
 
 
 function Case_Study_Bh() {
@@ -27,9 +26,9 @@ function Case_Study_Bh() {
                     Work
                     </LinkButton>
                   </Link>
-                  <Link href="/about">
+                  <Link href="/ai">
                     <LinkButton onClick={(event: React.MouseEvent<HTMLButtonElement>) => {}}>
-                    About
+                    AI Experiments
                     </LinkButton>
                   </Link>
                   <Link href="/cv">
@@ -296,53 +295,7 @@ function Case_Study_Bh() {
             </div>
           </div>
         </div>
-        <Footer
-          createdWithText="Proudly created and coded using:"
-          tools={
-            <>
-              <img
-                className="w-4 flex-none"
-                src="https://res.cloudinary.com/subframe/image/upload/v1711417507/shared/y2rsnhq3mex4auk54aye.png"
-              />
-              <span className="text-body font-body text-default-font">
-                Subframe
-              </span>
-              <span className="text-body font-body text-default-font">+</span>
-              <img
-                className="w-4 flex-none"
-                src="https://res.cloudinary.com/subframe/image/upload/v1755897676/uploads/20526/abte5rdrqheg9h0jl0ff.svg"
-              />
-              <span className="text-body font-body text-default-font">
-                Cursor
-              </span>
-            </>
-          }
-          socialText="Find me on"
-          socialLinks={
-            <>
-               <FeatherLinkedin className="text-body font-body text-default-font" />
-               <Link href="https://www.linkedin.com/in/pabloparma/" target="_blank" rel="noopener noreferrer">
-               <span className="text-body font-body text-default-font">
-                LinkedIn
-                </span>
-                </Link>
-              
-              <div className="flex w-px flex-none flex-col items-center gap-2 self-stretch bg-neutral-border" />
-              <FeatherInstagram className="text-body font-body text-default-font" />
-              <Link href="https://www.instagram.com/pabloparma/" target="_blank" rel="noopener noreferrer">
-              <span className="text-body font-body text-default-font">
-                Instagram
-              </span>
-              </Link>
-              <div className="flex w-px flex-none flex-col items-center gap-2 self-stretch bg-neutral-border" />
-              <FeatherSend className="text-body font-body text-default-font" />
-              
-              <CopyEmail />
-              
-            </>
-          }
-          copyright="© 2525 Pablo Parma"
-        />
+        <SiteFooter />
       </div>
     </DefaultPageLayout>
   );
