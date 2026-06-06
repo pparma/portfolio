@@ -207,7 +207,7 @@ function About() {
 
           {/* MAIN 3-COL GRID — overflow:hidden clips cell content to grid bounds */}
           <div
-            className="flex-1 min-h-0 overflow-hidden grid grid-cols-[2fr_3fr_auto] mobile:grid-cols-1 mobile:flex-none mobile:overflow-visible w-full mx-auto"
+            className="about-hero-grid flex-1 min-h-0 overflow-hidden grid grid-cols-[2fr_3fr_auto] mobile:grid-cols-1 mobile:flex-none mobile:overflow-visible w-full mx-auto"
             style={{ maxWidth: "1600px" }}
           >
 
@@ -285,9 +285,10 @@ function About() {
                 className="relative flex items-center justify-center overflow-visible min-w-0 mobile:order-1 mobile:h-72 mobile:mx-auto mobile:w-full"
                 style={{
                   minHeight: 0,
-                  backgroundImage: "url('/gradient-bg.png')",
+                  paddingTop: "15%",
+                  backgroundImage: "url('/gradient-bg.jpg')",
                   backgroundSize: "150%",
-                  backgroundPosition: "center 40%",
+                  backgroundPosition: "center 100%",
                   backgroundRepeat: "no-repeat",
                 }}
                 initial={{ opacity: 0, scale: 0.97 }}
@@ -312,7 +313,7 @@ function About() {
 
               {/* RIGHT: Stats — centered vertically */}
               <motion.div
-                className="overflow-hidden flex flex-col justify-center gap-10 px-12 mobile:px-6 mobile:py-10 mobile:order-3 mobile:grid mobile:grid-cols-2 mobile:gap-6"
+                className="about-stats flex flex-col justify-center gap-10 px-12 mobile:px-6 mobile:py-10 mobile:order-3 mobile:grid mobile:grid-cols-2 mobile:gap-6"
                 style={{ borderLeft: "1px solid rgba(23,23,23,0.08)" }}
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}

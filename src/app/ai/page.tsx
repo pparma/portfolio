@@ -8,7 +8,11 @@ import { FeatherArrowRight, FeatherInstagram, FeatherLinkedin, FeatherSend } fro
 import Link from "next/link";
 import { SiteFooter } from "@/src/components/SiteFooter";
 import { motion, useInView, useScroll, useTransform } from "framer-motion";
+import { HubSpokeDiagram } from "@/src/components/HubSpokeDiagram";
+import type { SpokeNode, DecorationDot } from "@/src/components/HubSpokeDiagram";
 import { CTAButton } from "@/src/components/CTAButton";
+import { WorkCard } from "@/src/components/WorkCard";
+import { PhotoCard } from "@/src/components/PhotoCard";
 
 /* ─── Scroll-scrubbed video hero ─────────────────────────────────────────── */
 
@@ -105,116 +109,24 @@ function ScrollVideoHero() {
 }
 
 
-/* ─── Folder-style work card ──────────────────────────────────────────────── */
+/* ─── Hub & Spoke config ─────────────────────────────────────────────────── */
 
-/* Folder header path — from folder-top.svg (864×104).
-   Wide landscape tab: curved ramp at ~30% width, rounded corner on right shelf.
-   Used as the card's header; a rectangle body extends below. */
-const FOLDER_TOP_PATH =
-  "M0 24C0 10.7452 10.7452 0 24 0H254.615C260.947 0 267.022 2.50218 271.518 6.96142L312.965 48.0771C321.955 56.9956 334.106 62 346.769 62H840C853.255 62 864 72.7452 864 86V104H0L0 24Z";
+const NODES: SpokeNode[] = [
+  { src: "/tech/Claude_AI_symbol.svg", label: "Claude AI", r: 165, ao: 0, shrink: 0.83 },
+  { src: "/tech/Figma-logo.svg", label: "Figma", r: 148, ao: -6, shrink: 0.90 },
+  { src: "/tech/GitHub_Invertocat_Black.svg", label: "GitHub", r: 172, ao: 9, shrink: 0.78 },
+  { src: "/tech/Google_Gemini_icon_2025.svg", label: "Gemini", r: 152, ao: -4, shrink: 0.95 },
+  { src: "/tech/vercel-icon-light.svg", label: "Vercel", r: 168, ao: 7, shrink: 0.86 },
+  { src: "/tech/CUBE_2D_LIGHT.svg", label: "Subframe", r: 142, ao: -8, shrink: 0.93 },
+  { src: "/tech/Google-Antigravity-Icon-One-Color.png", label: "Google", r: 158, ao: 5, shrink: 0.81 },
+];
 
-function WorkCard({
-  index,
-  number,
-  title,
-  subtitle,
-  href,
-  dark = false,
-}: {
-  index: number;
-  number: string;
-  title: string;
-  subtitle: string;
-  href: string;
-  dark?: boolean;
-}) {
-  const ref = useRef(null);
-  const isInView = useInView(ref, { once: true, margin: "-60px" });
-
-  const fill = dark ? "rgb(17, 17, 17)"       : "rgb(228, 222, 215)";
-  const text = dark ? "rgb(249, 246, 241)"     : "rgb(23, 23, 23)";
-  const sub  = dark ? "rgba(249,246,241,0.50)" : "rgb(115, 115, 115)";
-  const num  = dark ? "rgba(249,246,241,0.20)" : "rgba(23,23,23,0.18)";
-
-  return (
-    <motion.div
-      ref={ref}
-      initial={{ opacity: 0, y: 36 }}
-      animate={isInView ? { opacity: 1, y: 0 } : {}}
-      transition={{ type: "spring" as const, stiffness: 55, damping: 20, delay: index * 0.1 }}
-      whileHover={{ y: -8, transition: { type: "spring" as const, stiffness: 380, damping: 22 } }}
-      style={{ cursor: "pointer", height: "100%" }}
-    >
-      <Link href={href} style={{ display: "flex", flexDirection: "column", height: "100%" }}>
-        {/* Folder header — SVG tab shape, scales to full card width */}
-        <svg
-          viewBox="0 0 864 104"
-          width="100%"
-          aria-hidden="true"
-          style={{ display: "block", flexShrink: 0 }}
-        >
-          <path d={FOLDER_TOP_PATH} fill={fill} />
-        </svg>
-
-        {/* Card body — grows to fill remaining cell height */}
-        <div
-          style={{
-            backgroundColor: fill,
-            borderRadius: "0 0 18px 18px",
-            padding: "16px 24px 28px",
-            marginTop: "-1px", /* seal any sub-pixel gap */
-            flexGrow: 1,
-            display: "flex",
-            flexDirection: "column",
-            justifyContent: "space-between",
-            gap: "24px",
-          }}
-        >
-          {/* Number — top right */}
-          <div style={{ display: "flex", justifyContent: "flex-end" }}>
-            <span
-              style={{
-                color: num,
-                fontSize: "13px",
-                letterSpacing: "0.05em",
-                fontWeight: 500,
-                fontVariantNumeric: "tabular-nums",
-              }}
-            >
-              {number}
-            </span>
-          </div>
-
-          {/* Text — bottom */}
-          <div style={{ display: "flex", flexDirection: "column", gap: "8px" }}>
-            <span
-              style={{
-                color: text,
-                fontSize: "clamp(15px, 1.25vw, 20px)",
-                fontWeight: 700,
-                lineHeight: 1.2,
-                letterSpacing: "-0.02em",
-                textWrap: "pretty",
-              } as React.CSSProperties}
-            >
-              {title}
-            </span>
-            <span
-              style={{
-                color: sub,
-                fontSize: "13px",
-                lineHeight: 1.6,
-                textWrap: "pretty",
-              } as React.CSSProperties}
-            >
-              {subtitle}
-            </span>
-          </div>
-        </div>
-      </Link>
-    </motion.div>
-  );
-}
+const DOTS: DecorationDot[] = [
+  { a: -11.4, r: 100, dot_r: 7 },
+  { a: 91.5, r: 108, dot_r: 6 },
+  { a: 191.4, r: 100, dot_r: 8 },
+  { a: 246.8, r: 90, dot_r: 6 },
+];
 
 /* ─── Page ────────────────────────────────────────────────────────────────── */
 
@@ -239,17 +151,17 @@ function Index() {
         navigation={
           <>
             <Link href="/works">
-              <LinkButton onClick={(event: React.MouseEvent<HTMLButtonElement>) => {}}>
+              <LinkButton onClick={(event: React.MouseEvent<HTMLButtonElement>) => { }}>
                 Work
               </LinkButton>
             </Link>
             <Link href="/ai">
-              <LinkButton variant="active" onClick={(event: React.MouseEvent<HTMLButtonElement>) => {}}>
+              <LinkButton variant="active" onClick={(event: React.MouseEvent<HTMLButtonElement>) => { }}>
                 AI Experiments
               </LinkButton>
             </Link>
             <Link href="/cv">
-              <LinkButton onClick={(event: React.MouseEvent<HTMLButtonElement>) => {}}>
+              <LinkButton onClick={(event: React.MouseEvent<HTMLButtonElement>) => { }}>
                 CV
               </LinkButton>
             </Link>
@@ -314,88 +226,72 @@ function Index() {
             }}
           />
 
-          <div className="relative z-10 max-w-7xl mx-auto w-full flex flex-col items-start gap-8 px-14 mobile:px-6">
-            <motion.p
-              className="text-caption font-caption text-subtext-color"
-              initial={{ opacity: 0, y: 10 }}
-              animate={heroInView ? { opacity: 1, y: 0 } : {}}
-              transition={{ duration: 0.5, ease: "easeOut" }}
-            >
-              Product Designer · Rosario, Argentina · Open to remote
-            </motion.p>
+          <div className="relative z-10 max-w-7xl mx-auto w-full flex flex-row items-center justify-center gap-16 px-14 mobile:px-6 mobile:flex-col mobile:gap-8">
+            {/* Left: text content */}
+            <div className="flex flex-col items-start gap-8 min-w-0 max-w-[540px]">
+              <motion.p
+                className="text-caption font-caption text-subtext-color"
+                initial={{ opacity: 0, y: 10 }}
+                animate={heroInView ? { opacity: 1, y: 0 } : {}}
+                transition={{ duration: 0.5, ease: "easeOut" }}
+              >
+                Product Designer · Rosario, Argentina
+              </motion.p>
 
-            <div className="overflow-hidden">
-              <motion.h1
-                className="text-heading-1 font-heading-1 text-default-font max-w-[720px]"
-                style={{ textWrap: "balance" } as React.CSSProperties}
-                initial={{ y: "100%" }}
-                animate={heroInView ? { y: "0%" } : {}}
+              <div className="overflow-hidden">
+                <motion.h1
+                  className="text-heading-1 font-heading-1 text-default-font max-w-[560px]"
+                  style={{ textWrap: "balance" } as React.CSSProperties}
+                  initial={{ y: "100%" }}
+                  animate={heroInView ? { y: "0%" } : {}}
+                  transition={{
+                    type: "spring" as const,
+                    stiffness: 55,
+                    damping: 18,
+                    delay: 0.08,
+                  }}
+                >
+                  Making sense of AI through design, code, and curiosity.
+                </motion.h1>
+              </div>
+
+              <motion.p
+                className="text-body-big font-body-big text-subtext-color max-w-[460px]"
+                style={{ textWrap: "pretty" } as React.CSSProperties}
+                initial={{ opacity: 0, y: 14 }}
+                animate={heroInView ? { opacity: 1, y: 0 } : {}}
                 transition={{
                   type: "spring" as const,
                   stiffness: 55,
-                  damping: 18,
-                  delay: 0.08,
+                  damping: 20,
+                  delay: 0.2,
                 }}
               >
-                Product Designer crafting clear, calm interfaces.
-              </motion.h1>
+                Interaction paradigms are shifting, and I want to understand how.<br />
+                This is a collection of my hands on experiments, vibe coding, moving static
+                designs from Figma to functional code to discover how designers interface with intelligent systems.
+              </motion.p>
             </div>
 
-            <motion.p
-              className="text-body-big font-body-big text-subtext-color max-w-[520px]"
-              style={{ textWrap: "pretty" } as React.CSSProperties}
-              initial={{ opacity: 0, y: 14 }}
-              animate={heroInView ? { opacity: 1, y: 0 } : {}}
-              transition={{
-                type: "spring" as const,
-                stiffness: 55,
-                damping: 20,
-                delay: 0.2,
-              }}
-            >
-              Senior UI/UX designer focused on systems, product thinking, and
-              delightful details. Currently open to remote opportunities.
-            </motion.p>
-
-            <motion.div
-              className="flex items-center gap-6"
-              initial={{ opacity: 0, y: 12 }}
-              animate={heroInView ? { opacity: 1, y: 0 } : {}}
-              transition={{
-                type: "spring" as const,
-                stiffness: 55,
-                damping: 20,
-                delay: 0.3,
-              }}
-            >
-              <Link href="/works">
-                <CTAButton variant="primary">Browse Work ↗</CTAButton>
-              </Link>
-              <motion.a
-                href="/contact"
-                className="text-body font-body text-accent underline-offset-4 hover:underline"
-                whileHover={{ x: 3 }}
-                transition={{ type: "spring" as const, stiffness: 400, damping: 17 }}
-              >
-                Get in touch
-              </motion.a>
-            </motion.div>
+            {/* Right: hub-and-spoke tech diagram — grows to fill available flex space */}
+            <div className="flex-1 min-w-0 mobile:w-full" style={{ maxWidth: 540 }}>
+              <HubSpokeDiagram
+                nodes={NODES}
+                dots={DOTS}
+                hubSrc="/tech/pparmalogo.svg"
+                hubAlt="Pablo Parma"
+              />
+            </div>
           </div>
         </div>
-      </div>
+      </div >
 
-      {/* ── Selected Work — overlays hero, transparent so lines show through ── */}
-      <div
-        className="relative w-full"
-        style={{ zIndex: 30 }}
-      >
-        <section
-          className="flex w-full flex-col items-start py-20 px-6"
-          style={{ minHeight: "100dvh" }}
-        >
+      {/* ── Photo Cards Section ── */}
+      < div className="relative w-full" style={{ zIndex: 30 }
+      }>
+        <section className="flex w-full flex-col items-start py-20 px-6">
           <div className="max-w-7xl mx-auto w-full flex flex-col items-start gap-2">
 
-            {/* Section header — + accent left, label right */}
             <motion.div
               className="w-full flex items-center justify-between"
               initial={{ opacity: 0 }}
@@ -415,48 +311,45 @@ function Index() {
                 +
               </span>
               <span className="text-caption font-caption text-subtext-color uppercase tracking-widest">
-                Selected Work
+                AI Experiments
               </span>
             </motion.div>
 
-            {/* Divider */}
             <div className="w-full h-px bg-neutral-border mb-6" />
 
-            {/* Cards grid — extra top padding lets folder tabs breathe */}
             <div
               className="w-full grid grid-cols-3 gap-4 mobile:grid-cols-1"
               style={{ paddingTop: "12px" }}
             >
-              <WorkCard
+              <PhotoCard
                 index={0}
                 number="01/"
                 title="Simplifying Operations for BridgeHaul"
                 subtitle="Revolutionizing freight with a redesigned mobile app."
-                href="/case-study-bh"
+                imageSrc="/cards/comparefeature.png"
               />
-              <WorkCard
+              <PhotoCard
                 index={1}
                 number="02/"
                 title="Humanizing online rating discussions through Voice & Video UX"
                 subtitle="UX flows and a modular design system for publishers."
-                href="/case-study-yappa"
+                imageSrc="/cards/designsystem.jpeg"
               />
-              <WorkCard
+              <PhotoCard
                 index={2}
                 number="03/"
                 title="AI-driven platform for legal management"
                 subtitle="A streamlined, user-friendly platform for intelligent document management."
-                href="/case-study-docsnap"
-                dark
+                imageSrc="/cards/ways-to-shop.jpg"
               />
             </div>
           </div>
         </section>
-      </div>
+      </div >
 
       {/* ── Footer ── */}
-        <SiteFooter />
-    </div>
+      < SiteFooter />
+    </div >
   );
 }
 

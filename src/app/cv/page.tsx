@@ -107,8 +107,8 @@ function Cv() {
                 </>
           }
         />
-        <div className="container max-w-none flex w-full flex-col items-center gap-16 bg-default-background pb-12 pt-[86px]">
-          <div className="flex w-full items-start justify-center gap-8 mobile:flex-col mobile:flex-nowrap mobile:gap-8">
+        <div className="container max-w-none flex w-full flex-col items-center gap-16 bg-default-background pb-12 pt-[86px] px-6">
+          <div className="max-w-7xl w-full flex items-start gap-8 mobile:flex-col mobile:flex-nowrap mobile:gap-8">
             <div className="flex min-w-[256px] flex-col items-start gap-4">
               <div className="flex w-52 flex-col items-center justify-center overflow-hidden rounded-full">
                 <img
@@ -121,7 +121,7 @@ function Cv() {
                   Pablo Parma
                 </span>
                 <span className="text-caption-bold font-caption-bold text-subtext-color">
-                  Product Designer | UI/UX Specialist
+                  Senior Product Designer · Design Systems & AI
                 </span>
               </div>
               <div className="flex items-center gap-2">
@@ -142,7 +142,7 @@ function Cv() {
                   <Badge variant="neutral">English (Advanced)</Badge>
                 </div>
               </div>
-              <a href="/pablo-parma-resume.pdf" download>
+              <a href="/pablo-parma-resume.pdf" download="Pablo-Parma-Resume.pdf">
                 <CTAButton variant="primary" className="w-full">
                   Download CV
                 </CTAButton>
@@ -155,7 +155,7 @@ function Cv() {
                 </span>
                 <span className="whitespace-pre-wrap text-body font-body text-default-font">
                   {
-                    "Product Designer with over 10 years of experience delivering user-centered digital experiences across mobile, web, and AI-powered platforms. Skilled in research, UX strategy, and design systems built with React, Tailwind, and Shadcn. Experienced working in Agile squads with developers, product managers, and business teams. Passionate about solving complex problems through clean, scalable, and thoughtful design that drives user\nengagement and business results."
+                    "Senior Product Designer with 10+ years of experience specializing in design systems architecture and AI-powered product experiences across mobile and web. I build scalable component libraries in Figma aligned with React, Tailwind, and Shadcn — bridging design and engineering with precision. Currently working at the intersection of AI and UX, using tools like Claude and Gemini to prototype, research, and ship faster. Experienced in Agile squads alongside engineers, PMs, and business stakeholders, delivering measurable results through clean, systems-driven design."
                   }
                 </span>
               </div>
@@ -164,17 +164,21 @@ function Cv() {
                   SKILLS
                 </span>
                 <div className="flex w-full flex-wrap items-start gap-2">
-                  <Badge>Figma</Badge>
-                  <Badge>Adobe CC</Badge>
-                  <Badge>Tailwind</Badge>
-                  <Badge>HTML/CSS</Badge>
                   <Badge>Design Systems</Badge>
+                  <Badge>Figma</Badge>
+                  <Badge>React</Badge>
+                  <Badge>Tailwind CSS</Badge>
+                  <Badge>Shadcn</Badge>
+                  <Badge>HTML / CSS</Badge>
+                  <Badge>AI UX Patterns</Badge>
+                  <Badge>Claude</Badge>
+                  <Badge>Gemini</Badge>
+                  <Badge>Cursor</Badge>
                   <Badge>User Research</Badge>
                   <Badge>Prototyping</Badge>
-                  <Badge>Agile</Badge>
-                  <Badge>AI UX Patterns</Badge>
-                  <Badge>Subframe</Badge>
-                  <Badge>Cursor</Badge>
+                  <Badge>Wireframing</Badge>
+                  <Badge>Agile / Lean UX</Badge>
+                  <Badge>XR / AR</Badge>
                 </div>
               </div>
               <div className="flex w-full flex-col items-start gap-4">
@@ -192,19 +196,19 @@ function Cv() {
                     <div className="flex w-full flex-col items-start">
                       <div className="flex w-full items-start gap-3 pr-4 py-2">
                         <IconWithBackground className="h-5 w-4 flex-none" variant="success" />
-                        <span className="grow shrink-0 basis-0 text-body font-body text-default-font">Designed the current Sally Beauty app experience and CosmoProf app experience end-to-end.</span>
+                        <span className="grow shrink-0 basis-0 text-body font-body text-default-font">Designed end-to-end experience for Sally Beauty and CosmoProf apps, serving millions of active users across iOS and Android.</span>
                       </div>
                       <div className="flex w-full items-start gap-3 pr-4 py-2">
                         <IconWithBackground className="h-5 w-4 flex-none" variant="success" />
-                        <span className="grow shrink-0 basis-0 text-body font-body text-default-font">Contributed to the design system and provided guidance for implementation across teams.</span>
+                        <span className="grow shrink-0 basis-0 text-body font-body text-default-font">Architected and contributed 100+ components to the design system, enabling consistent implementation across engineering teams.</span>
                       </div>
                       <div className="flex w-full items-start gap-3 pr-4 py-2">
                         <IconWithBackground className="h-5 w-4 flex-none" variant="success" />
-                        <span className="grow shrink-0 basis-0 text-body font-body text-default-font">Defined user flows and delivered pixel-perfect layouts for development handoff.</span>
+                        <span className="grow shrink-0 basis-0 text-body font-body text-default-font">Defined user flows and pixel-perfect layouts for key product areas; building AI-powered prototypes to accelerate user testing.</span>
                       </div>
                       <div className="flex w-full items-start gap-3 pr-4 py-2">
                         <IconWithBackground className="h-5 w-4 flex-none" variant="success" />
-                        <span className="grow shrink-0 basis-0 text-body font-body text-default-font">Currently building AI-powered prototypes for user testing and research validation.</span>
+                        <span className="grow shrink-0 basis-0 text-body font-body text-default-font">Using Claude and Gemini to prototype AI-driven UX flows, reducing research validation cycles significantly.</span>
                       </div>
                     </div>
                   </FolderCard>
@@ -226,7 +230,7 @@ function Cv() {
                       </div>
                       <div className="flex w-full items-start gap-3 pr-4 py-2">
                         <IconWithBackground className="h-5 w-4 flex-none" variant="success" />
-                        <span className="grow shrink-0 basis-0 text-body font-body text-default-font">Created a scalable Figma design system aligned with React, Tailwind, and Shadcn for consistency across teams.</span>
+                        <span className="grow shrink-0 basis-0 text-body font-body text-default-font">Architected a scalable Figma design system aligned with React, Tailwind, and Shadcn — adopted by 2 engineering teams for cross-product consistency.</span>
                       </div>
                     </div>
                   </FolderCard>

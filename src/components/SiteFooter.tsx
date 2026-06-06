@@ -11,19 +11,14 @@ export function SiteFooter() {
       createdWithText="Proudly created and coded using:"
       tools={
         <>
-          <img
-            className="w-4 flex-none"
-            src="https://res.cloudinary.com/subframe/image/upload/v1711417507/shared/y2rsnhq3mex4auk54aye.png"
-            alt="Subframe"
-          />
-          <span className="text-body font-body text-default-font">Subframe</span>
+          <img className="w-4 flex-none" src="/tech/Claude_AI_symbol.svg" alt="Claude" />
+          <span className="text-body font-body text-default-font">Claude</span>
           <span className="text-body font-body text-default-font">+</span>
-          <img
-            className="w-4 flex-none"
-            src="https://res.cloudinary.com/subframe/image/upload/v1755897676/uploads/20526/abte5rdrqheg9h0jl0ff.svg"
-            alt="Cursor"
-          />
-          <span className="text-body font-body text-default-font">Cursor</span>
+          <img className="w-4 flex-none" src="/tech/Google_Gemini_icon_2025.svg" alt="Gemini" />
+          <span className="text-body font-body text-default-font">Gemini</span>
+          <span className="text-body font-body text-default-font">+</span>
+          <img className="w-4 flex-none" src="/tech/Google-Antigravity-Icon-One-Color.png" alt="Antigravity" />
+          <span className="text-body font-body text-default-font">Antigravity</span>
         </>
       }
       socialText="Find me on"
@@ -43,7 +38,7 @@ export function SiteFooter() {
           <CopyEmail />
         </>
       }
-      copyright="© 2025 Pablo Parma"
+      copyright="© 2026 Pablo Parma"
     />
   );
 }

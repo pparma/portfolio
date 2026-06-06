@@ -23,6 +23,24 @@
   --color-surface-mid2:  rgb(245, 245, 245);
 }
 
+/* About page: at medium breakpoint, collapse to 2-col top row + stats full-width bottom row */
+@media (min-width: 768px) and (max-width: 1023px) {
+  .about-hero-grid {
+    grid-template-columns: 2fr 3fr;
+    grid-template-rows: 1fr auto;
+  }
+  .about-stats {
+    grid-column: 1 / -1;
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 1.5rem;
+    padding: 2rem 3.5rem;
+    border-left: none !important;
+    border-top: 1px solid rgba(23, 23, 23, 0.08);
+    flex-direction: unset;
+  }
+}
+
 html {
   font-family: "IBM Plex Mono", monospace;
   height: 100vh;
