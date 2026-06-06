@@ -6,7 +6,7 @@ export default function CopyEmail() {
   return (
     <Link href="/contact">
       <span className="cursor-pointer text-body font-body text-default-font hover:underline">
-        Let's work together
+        Let&apos;s work together
       </span>
     </Link>
   );
