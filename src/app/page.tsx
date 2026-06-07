@@ -269,7 +269,7 @@ function About() {
                 <Link href="/works">
                   <CTAButton variant="primary">View Work ↗</CTAButton>
                 </Link>
-                <a href="/pablo-parma-resume.pdf" download>
+                <a href="/Pablo_Parma-Product_Designer.pdf" download>
                   <motion.span
                     style={{ color: "rgba(23,23,23,0.48)", fontSize: "13px", textDecoration: "underline", textUnderlineOffset: "4px", cursor: "pointer", letterSpacing: "0.02em" }}
                     whileHover={{ color: "rgba(23,23,23,0.85)" }}

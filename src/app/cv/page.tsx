@@ -142,7 +142,7 @@ function Cv() {
                   <Badge variant="neutral">English (Advanced)</Badge>
                 </div>
               </div>
-              <a href="/pablo-parma-resume.pdf" download="Pablo-Parma-Resume.pdf">
+              <a href="/Pablo_Parma-Product_Designer.pdf" download="Pablo-Parma-Resume.pdf">
                 <CTAButton variant="primary" className="w-full">
                   Download CV
                 </CTAButton>
