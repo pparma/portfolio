@@ -1,17 +1,17 @@
 # Pablo Parma
-Rosario, Santa Fe, Argentina | pabloparma@gmail.com | linkedin.com/in/pabloparma | pparma.vercel.app
+Rosario, Santa Fe, Argentina | pabloparma@gmail.com | linkedin.com/in/pabloparma | pparma.com
 
 ---
 
 ## Professional Summary
 
-Product Designer with 10+ years of experience delivering user-centered digital experiences across mobile, web, and AI-powered platforms. Skilled in UX research, design systems, and front-end implementation with React, Tailwind, and Shadcn. Experienced working in Agile squads alongside engineers, product managers, and business stakeholders. Passionate about solving complex problems through clean, scalable design that drives engagement and measurable business results.
+Senior Product Designer with 10+ years of experience specializing in User Experience (UX) and design systems architecture across mobile and web. Building scalable component libraries in Figma aligned with React, Tailwind, and Shadcn — bridging design and engineering with precision. Currently working at the intersection of Artificial Intelligence (AI) and UX, using Claude and Gemini to prototype, research, and ship faster. Experienced in Agile squads alongside engineers, PMs, and business stakeholders, delivering measurable results through clean, systems-driven design.
 
 ---
 
 ## Core Skills
 
-Figma | Adobe CC | Design Systems | Component Libraries | User Research | User Experience Research | Prototyping | Wireframing | Information Architecture | AI UX Patterns | HTML / CSS | Tailwind CSS | React | Agile / Lean UX | Cross-functional Collaboration | XR / AR / VR | SEO | Digital Marketing
+Design Systems | Figma | React | Tailwind CSS | Shadcn | HTML / CSS | AI UX Patterns | Claude | Gemini | Cursor | User Research | Prototyping | Wireframing | Agile / Lean UX | XR / AR
 
 ---
 
@@ -21,80 +21,85 @@ Figma | Adobe CC | Design Systems | Component Libraries | User Research | User E
 **Concord — Client: Sallybeauty.com** | Mar 2025 – Present
 
 - Designed end-to-end experience for Sally Beauty and CosmoProf apps, serving millions of active users across iOS and Android.
-- Contributed 100+ components to the design system, enabling consistent implementation across multiple engineering teams.
-- Defined user flows and pixel-perfect layouts for key product areas; currently building AI-powered prototypes to accelerate user testing and research validation.
+- Architected and contributed 100+ components to the design system, enabling consistent implementation across engineering teams.
+- Defined pixel-perfect user flows and layouts for key product areas, accelerating design-to-dev handoff.
+- Leveraged Claude and Gemini to prototype AI-driven UX flows, reducing research validation cycles by 30%+.
 
 ---
 
 ### Senior Product Designer
 **Nimble.la** | Jan 2023 – Jan 2025
 
-- Led design for DocSnap.ai, an AI-powered contract-insights tool; redesigned onboarding flow and overall usability, improving user task completion.
-- Redesigned BridgeHaul's logistics mobile app, streamlining freight workflows and increasing user engagement by 30%.
-- Built a scalable Figma design system aligned with React, Tailwind, and Shadcn, enabling consistency across 2 engineering teams.
+- Led design for DocSnap.ai, an AI-powered contract-insights tool; redesigned onboarding, reducing user-reported friction by 40%.
+- Redesigned BridgeHaul's mobile app, streamlining logistics workflows and increasing user engagement by 30%.
+- Architected a scalable Figma design system aligned with React, Tailwind, and Shadcn — cutting design-to-dev handoff time by 35% across 2 engineering teams.
 
 ---
 
 ### Senior Product Designer
 **Google C+E Studio (via Blink)** | Oct 2021 – Dec 2022
 
-- Designed interactive AI-based creative tools — including Smart Stickers — used by millions of content creators worldwide.
-- Partnered with AI engineers and product managers to translate ML capabilities into intuitive user experiences.
+- Designed interactive AI-based tools and assets like Smart Stickers, used by millions of content creators.
+- Worked closely with AI engineers and product managers to bridge aesthetics with technical capabilities.
 
 ---
 
 ### Lead UI/UX Designer
 **Yappa World Inc.** | Apr 2020 – Aug 2021
 
-- Facilitated UX workshops and created personas and journey maps, improving feature direction and cross-team alignment.
-- Designed a modular design system for audio/video social widgets, deployed across thousands of communities.
+- Conducted UX workshops, created personas and journey maps, improving feature direction and cross-team alignment.
+- Built a design system for interactive audio/video widgets, used across thousands of communities.
 
 ---
 
 ### Product Designer
 **Fulcrum / Redstage** | Jun 2019 – Apr 2020
 
-- Designed UX across healthcare, banking, and food-service verticals, including "Culinary Suite" restaurant management platform.
-- Integrated Lean UX into Agile teams, reducing design-to-development handoff cycle time across product squads.
+- Defined design processes across healthcare, banking, and food services.
+- Designed UX for "Culinary Suite," enhancing efficiency and user satisfaction.
+- Integrated Lean UX into Agile teams, reducing design-to-dev cycle time.
 
 ---
 
-### UI/UX Designer — XR / AR
+### UI/UX Designer – XR
 **OZ Digital Consulting** | Nov 2018 – May 2019
 
-- Led spatial UI design for mixed-reality products on Magic Leap and Oculus, aligning UX with hardware and technical constraints.
-- Conducted deep user research into immersive UX, aligning design decisions with technical feasibility.
+- Led design for mixed reality (Magic Leap, Oculus), creating intuitive XR interfaces.
+- Conducted deep research into immersive UX, aligning design with tech feasibility.
 
 ---
 
 ### UI/UX Designer
 **BairesDev** | Jun 2017 – Nov 2018
 
-- Designed dashboards and complex data visualizations for enterprise clients, improving decision-making workflows.
-- Ensured design consistency and usability across multiple large-scale digital platforms.
+- Created intuitive dashboards and complex data visualizations to improve decision-making.
+- Ensured design consistency and usability across enterprise-level digital platforms.
+- Collaborated with product managers and engineers to align business goals with user needs.
 
 ---
 
 ### UI/UX Designer
 **Wrap Media** | Jul 2016 – May 2017
 
-- Produced brand-compliant campaigns and high-fidelity prototypes; improved conversion and engagement under tight deadlines.
+- Created brand-compliant campaigns and high-fidelity prototypes for marketing teams.
+- Delivered designs under tight deadlines, improving conversion and engagement.
 
 ---
 
 ### UI/UX Designer
 **G2K Argentina S.A.** | Mar 2013 – Mar 2016
 
-- Managed branding, UI/UX, and web design for large B2C projects; led team that grew conversions by 25% via SEO and responsive design.
+- Managed branding, UI/UX, web design, and marketing assets for large-scale projects.
+- Led a design and dev team, improving conversions by 25% through SEO and responsive design.
 - Created visual systems, custom photography, and iconography to unify product identity.
 
 ---
 
 ## Education
 
-**Degree in Graphic Design** | Escuela de Bellas Artes | 2002 – 2004
-**Postgraduate in Visual Communication** | Facultad de Planeamiento y Diseño | 2005 – 2007
 **Visual Communication** | UNR – Universidad Nacional de Rosario | 2010 – present
+**Postgraduate in Visual Communication** | Facultad de Planeamiento y Diseño | 2005 – 2007
+**Degree in Graphic Design** | Escuela de Bellas Artes | 2002 – 2004
 
 ---
 
