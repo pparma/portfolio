@@ -48,6 +48,32 @@ html {
   flex-direction: column;
 }
 
+@media (prefers-reduced-motion: no-preference) {
+  html {
+    scroll-behavior: smooth;
+  }
+}
+
 body {
   flex-grow: 1;
+}
+
+::selection {
+  background: rgba(232, 80, 0, 0.18);
+}
+
+:focus-visible {
+  outline: 2px solid var(--color-accent);
+  outline-offset: 3px;
+  border-radius: 2px;
+}
+
+/* Work folder cards — image zoom on hover */
+.workcard .workcard-img {
+  transition: transform 0.6s cubic-bezier(0.25, 0.1, 0.25, 1);
+  will-change: transform;
+}
+
+.workcard:hover .workcard-img {
+  transform: scale(1.045);
 }

@@ -20,6 +20,7 @@ function WorkCard({
   title,
   subtitle,
   href,
+  image,
   dark = false,
 }: {
   index: number;
@@ -27,6 +28,7 @@ function WorkCard({
   title: string;
   subtitle: string;
   href: string;
+  image: string;
   dark?: boolean;
 }) {
   const ref = useRef(null);
@@ -46,7 +48,7 @@ function WorkCard({
       whileHover={{ y: -8, transition: { type: "spring" as const, stiffness: 380, damping: 22 } }}
       style={{ cursor: "pointer", height: "100%" }}
     >
-      <Link href={href} style={{ display: "flex", flexDirection: "column", height: "100%" }}>
+      <Link href={href} className="workcard" style={{ display: "flex", flexDirection: "column", height: "100%" }}>
         <svg viewBox="0 0 864 104" width="100%" aria-hidden="true" style={{ display: "block", flexShrink: 0 }}>
           <path d={FOLDER_TOP_PATH} fill={fill} />
         </svg>
@@ -54,24 +56,40 @@ function WorkCard({
           style={{
             backgroundColor: fill,
             borderRadius: "0 0 18px 18px",
-            padding: "16px 24px 28px",
+            padding: "0 12px 20px",
             marginTop: "-1px",
             flexGrow: 1,
             display: "flex",
             flexDirection: "column",
-            justifyContent: "space-between",
-            gap: "24px",
+            gap: "16px",
           }}
         >
-          <div style={{ display: "flex", justifyContent: "flex-end" }}>
-            <span style={{ color: num, fontSize: "13px", letterSpacing: "0.05em", fontWeight: 500, fontVariantNumeric: "tabular-nums" }}>
-              {number}
-            </span>
+          <div
+            className="workcard-imgwrap"
+            style={{
+              borderRadius: "10px",
+              overflow: "hidden",
+              aspectRatio: "16 / 10",
+              flexShrink: 0,
+              backgroundColor: dark ? "rgba(249,246,241,0.06)" : "rgba(23,23,23,0.05)",
+            }}
+          >
+            <img
+              src={image}
+              alt={`${title} — preview`}
+              className="workcard-img"
+              style={{ width: "100%", height: "100%", objectFit: "cover", display: "block" }}
+            />
           </div>
-          <div style={{ display: "flex", flexDirection: "column", gap: "8px" }}>
-            <span style={{ color: text, fontSize: "clamp(15px, 1.25vw, 20px)", fontWeight: 700, lineHeight: 1.2, letterSpacing: "-0.02em", textWrap: "pretty" } as React.CSSProperties}>
-              {title}
-            </span>
+          <div style={{ display: "flex", flexDirection: "column", gap: "8px", padding: "0 12px", marginTop: "auto" }}>
+            <div style={{ display: "flex", justifyContent: "space-between", alignItems: "baseline", gap: "12px" }}>
+              <span style={{ color: text, fontSize: "clamp(15px, 1.25vw, 20px)", fontWeight: 700, lineHeight: 1.2, letterSpacing: "-0.02em", textWrap: "pretty" } as React.CSSProperties}>
+                {title}
+              </span>
+              <span style={{ color: num, fontSize: "13px", letterSpacing: "0.05em", fontWeight: 500, fontVariantNumeric: "tabular-nums", flexShrink: 0 }}>
+                {number}
+              </span>
+            </div>
             <span style={{ color: sub, fontSize: "13px", lineHeight: 1.6, textWrap: "pretty" } as React.CSSProperties}>
               {subtitle}
             </span>
@@ -113,7 +131,7 @@ function AboutSection({
       <AnimLine />
       <div className="grid grid-cols-[5fr_7fr] gap-12 py-12 mobile:grid-cols-1 mobile:gap-5 mobile:py-8">
         <div className="flex flex-col gap-3">
-          <motion.span className="text-caption font-caption text-subtext-color tabular-nums"
+          <motion.span className="text-caption font-caption tabular-nums" style={{ color: "rgb(232, 80, 0)" }}
             initial={{ opacity: 0 }} animate={inView ? { opacity: 1 } : {}}
             transition={{ duration: 0.35, delay: 0.05 }}>
             {index}
@@ -207,7 +225,7 @@ function About() {
 
           {/* MAIN 3-COL GRID — overflow:hidden clips cell content to grid bounds */}
           <div
-            className="flex-1 min-h-0 overflow-hidden grid grid-cols-[2fr_3fr_auto] mobile:grid-cols-1 mobile:flex-none mobile:overflow-visible w-full mx-auto"
+            className="about-hero-grid flex-1 min-h-0 overflow-hidden grid grid-cols-[2fr_3fr_auto] mobile:grid-cols-1 mobile:flex-none mobile:overflow-visible w-full mx-auto"
             style={{ maxWidth: "1600px" }}
           >
 
@@ -243,7 +261,7 @@ function About() {
                 </p>
                 <div className="overflow-hidden">
                   <motion.h1
-                    style={{ color: "#171717", fontSize: "clamp(40px,4.5vw,80px)", lineHeight: 0.92, letterSpacing: "-0.04em", fontWeight: 700 }}
+                    style={{ color: "#171717", fontSize: "clamp(36px,4.2vw,78px)", lineHeight: 0.92, letterSpacing: "-0.04em", fontWeight: 700 }}
                     initial={{ y: "110%" }} animate={{ y: "0%" }}
                     transition={{ type: "spring", stiffness: 48, damping: 16, delay: 0.5 }}
                   >
@@ -312,7 +330,7 @@ function About() {
 
             {/* RIGHT: Stats — centered vertically */}
             <motion.div
-              className="overflow-hidden flex flex-col justify-center gap-10 px-12 mobile:px-6 mobile:py-10 mobile:order-3 mobile:grid mobile:grid-cols-2 mobile:gap-6"
+              className="about-stats overflow-hidden flex flex-col justify-center gap-10 px-12 mobile:px-6 mobile:py-10 mobile:order-3 mobile:grid mobile:grid-cols-2 mobile:gap-6"
               style={{ borderLeft: "1px solid rgba(23,23,23,0.08)" }}
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
@@ -386,18 +404,30 @@ function About() {
               transition={{ duration: 0.45, ease: "easeOut" }}
             >
               <span style={{ color: "rgb(232, 80, 0)", fontSize: "22px", fontWeight: 700, lineHeight: 1, userSelect: "none" }}>+</span>
-              <span className="text-caption font-caption text-subtext-color uppercase tracking-widest">Selected Work</span>
+              <span className="text-caption font-caption text-subtext-color uppercase tracking-widest tabular-nums">01 — 03</span>
             </motion.div>
-            <div className="w-full h-px bg-neutral-border mb-6" />
-            <div className="w-full grid grid-cols-3 gap-4 mobile:grid-cols-1" style={{ paddingTop: "12px" }}>
-              <WorkCard index={0} number="01/" title="Simplifying Operations for BridgeHaul" subtitle="Revolutionizing freight with a redesigned mobile app." href="/case-study-bh" />
-              <WorkCard index={1} number="02/" title="Humanizing online rating discussions through Voice & Video UX" subtitle="UX flows and a modular design system for publishers." href="/case-study-yappa" />
-              <WorkCard index={2} number="03/" title="AI-driven platform for legal management" subtitle="A streamlined, user-friendly platform for intelligent document management." href="/case-study-docsnap" dark />
+            <div className="w-full h-px bg-neutral-border" />
+            <div className="overflow-hidden py-5">
+              <motion.h2
+                className="font-heading-2 text-default-font"
+                style={{ fontSize: "clamp(24px,2.8vw,38px)", lineHeight: 1.08, letterSpacing: "-0.015em", fontWeight: 700 }}
+                initial={{ y: "110%" }}
+                whileInView={{ y: "0%" }}
+                viewport={{ once: true, margin: "-40px" }}
+                transition={{ type: "spring", stiffness: 55, damping: 18, delay: 0.1 }}
+              >
+                Selected Work
+              </motion.h2>
+            </div>
+            <div className="w-full grid grid-cols-3 gap-4 mobile:grid-cols-1" style={{ paddingTop: "4px" }}>
+              <WorkCard index={0} number="01/" title="Simplifying Operations for BridgeHaul" subtitle="Revolutionizing freight with a redesigned mobile app." href="/case-study-bh" image="https://res.cloudinary.com/subframe/image/upload/v1755562055/uploads/20526/lyoychwpwl3h0bynaxii.png" />
+              <WorkCard index={1} number="02/" title="Humanizing online rating discussions through Voice & Video UX" subtitle="UX flows and a modular design system for publishers." href="/case-study-yappa" image="https://res.cloudinary.com/subframe/image/upload/v1756048947/uploads/20526/yizdabjt8n9aute45cop.png" />
+              <WorkCard index={2} number="03/" title="AI-driven platform for legal management" subtitle="A streamlined, user-friendly platform for intelligent document management." href="/case-study-docsnap" image="https://res.cloudinary.com/subframe/image/upload/v1755906077/uploads/20526/oyzg1w7wuhxvqy8nr0nm.jpg" dark />
             </div>
           </div>
         </section>
 
-        <main className="w-full max-w-7xl mx-auto px-14 pb-24 mobile:px-6">
+        <main className="w-full max-w-7xl mx-auto px-6 pb-24">
           <AboutSection index="01" heading="What sets me apart?"
             body="Whether I'm exploring nature, experimenting with new creative tools, or collaborating on design projects, I bring the same curiosity, dedication, and love for meaningful experiences that define both my personal and professional journey."
           />

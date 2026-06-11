@@ -3,8 +3,15 @@ import type { Metadata } from "next";
 import { Analytics } from "@vercel/analytics/next";
 
 export const metadata: Metadata = {
-  title: "Pablo Parma Portfolio - ",
-  description: "Created using Subframe + Cursor",
+  title: "Pablo Parma — Product Designer",
+  description:
+    "Product designer with 10+ years building user-centered digital experiences across mobile, web, and AI-powered platforms.",
+  openGraph: {
+    title: "Pablo Parma — Product Designer",
+    description:
+      "Product designer with 10+ years building user-centered digital experiences across mobile, web, and AI-powered platforms.",
+    images: ["/portrait.png"],
+  },
 };
 
 export default function RootLayout({
