@@ -1,24 +1,17 @@
 "use client";
 
-import React, { useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import Link from "next/link";
-import { motion } from "framer-motion";
+import { motion, AnimatePresence } from "framer-motion";
+import { NavigationHeader } from "@/ui/components/NavigationHeader";
+import { LinkButton } from "@/ui/components/LinkButton";
 import { CTAButton } from "@/src/components/CTAButton";
 import { SiteFooter } from "@/src/components/SiteFooter";
 
 /* ─── Constants ───────────────────────────────────────────────────────────── */
 
-const EMAIL = "pabloparma@gmail.com";
 const LINKEDIN = "https://www.linkedin.com/in/pabloparma/";
 const CV_PDF = "/Pablo_Parma-Product_Designer.pdf";
-const ACCENT = "rgb(232, 80, 0)";
-
-const MICRO: React.CSSProperties = {
-  fontSize: "10px",
-  letterSpacing: "0.14em",
-  textTransform: "uppercase",
-  fontVariantNumeric: "tabular-nums",
-};
 
 const FOLDER_TOP_PATH =
   "M0 24C0 10.7452 10.7452 0 24 0H254.615C260.947 0 267.022 2.50218 271.518 6.96142L312.965 48.0771C321.955 56.9956 334.106 62 346.769 62H840C853.255 62 864 72.7452 864 86V104H0L0 24Z";
@@ -47,44 +40,19 @@ function Reveal({
   );
 }
 
-/* ─── Copy-email button ───────────────────────────────────────────────────── */
-
-function CopyEmailButton() {
-  const [copied, setCopied] = useState(false);
-  const timer = useRef<ReturnType<typeof setTimeout>>();
-
-  const copy = async () => {
-    try {
-      await navigator.clipboard.writeText(EMAIL);
-    } catch {
-      /* clipboard unavailable — mailto CTA next to this still works */
-    }
-    setCopied(true);
-    clearTimeout(timer.current);
-    timer.current = setTimeout(() => setCopied(false), 1800);
-  };
-
-  return (
-    <button
-      onClick={copy}
-      className="text-[13px] underline underline-offset-4 transition-colors"
-      style={{ color: copied ? "rgb(74,222,128)" : "rgba(249,246,241,0.6)" }}
-    >
-      {copied ? "Copied ✓" : `Copy ${EMAIL}`}
-    </button>
-  );
-}
-
 /* ─── Section header (orange +, caption, rule, display heading) ──────────── */
 
 function SectionHeader({ caption, heading }: { caption: string; heading: string }) {
   return (
     <Reveal>
       <div className="flex items-center justify-between">
-        <span className="select-none text-[22px] font-bold leading-none" style={{ color: ACCENT }}>
+        <span
+          className="select-none text-[22px] font-bold leading-none"
+          style={{ color: "var(--color-accent)" }}
+        >
           +
         </span>
-        <span className="text-caption font-caption text-subtext-color" style={MICRO}>
+        <span className="text-caption font-caption text-subtext-color uppercase tracking-widest tabular-nums">
           {caption}
         </span>
       </div>
@@ -96,6 +64,227 @@ function SectionHeader({ caption, heading }: { caption: string; heading: string 
         {heading}
       </h2>
     </Reveal>
+  );
+}
+
+/* ─── Dark contact form — posts to the same /api/contact as the contact page ── */
+
+const darkInputClass =
+  "w-full bg-transparent border-b py-3 text-body font-body outline-none transition-colors duration-200";
+
+function DarkField({
+  label,
+  error,
+  children,
+}: {
+  label: string;
+  error?: string;
+  children: React.ReactNode;
+}) {
+  return (
+    <div className="flex flex-col gap-2">
+      <label
+        className="text-caption font-caption uppercase tracking-widest"
+        style={{ color: "rgba(249,246,241,0.4)" }}
+      >
+        {label}
+      </label>
+      {children}
+      <AnimatePresence>
+        {error && (
+          <motion.span
+            className="text-caption font-caption"
+            style={{ color: "rgb(248, 113, 113)" }}
+            initial={{ opacity: 0, y: -4 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -4 }}
+            transition={{ duration: 0.2 }}
+          >
+            {error}
+          </motion.span>
+        )}
+      </AnimatePresence>
+    </div>
+  );
+}
+
+function HireContactForm() {
+  const loadedAtRef = useRef(Date.now());
+  const [form, setForm] = useState({ name: "", email: "", message: "" });
+  const [errors, setErrors] = useState<Record<string, string>>({});
+  const [status, setStatus] = useState<"idle" | "sending" | "success" | "error">("idle");
+  const [serverError, setServerError] = useState("");
+
+  function validate() {
+    const e: Record<string, string> = {};
+    if (!form.name.trim()) e.name = "Name is required.";
+    else if (form.name.length > 120) e.name = "Name is too long.";
+
+    if (!form.email.trim()) e.email = "Email is required.";
+    else if (!/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(form.email.trim()))
+      e.email = "Enter a valid email address.";
+
+    if (!form.message.trim()) e.message = "Message is required.";
+    else if (form.message.length > 3000) e.message = "Keep it under 3,000 characters.";
+
+    return e;
+  }
+
+  async function handleSubmit(e: React.FormEvent) {
+    e.preventDefault();
+    const errs = validate();
+    if (Object.keys(errs).length) {
+      setErrors(errs);
+      return;
+    }
+
+    setStatus("sending");
+    setServerError("");
+
+    try {
+      const res = await fetch("/api/contact", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          name: form.name,
+          email: form.email,
+          message: form.message,
+          _hp: "", // honeypot — always empty from real users
+          loadedAt: loadedAtRef.current,
+        }),
+      });
+
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.error ?? "Something went wrong.");
+      setStatus("success");
+    } catch (err: unknown) {
+      setStatus("error");
+      setServerError(err instanceof Error ? err.message : "Something went wrong.");
+    }
+  }
+
+  function handleChange(field: string, value: string) {
+    setForm((f) => ({ ...f, [field]: value }));
+    if (errors[field]) setErrors((e) => ({ ...e, [field]: "" }));
+  }
+
+  const inputStyle: React.CSSProperties = {
+    color: "rgb(249,246,241)",
+    borderColor: "rgba(249,246,241,0.2)",
+  };
+
+  return (
+    <AnimatePresence mode="wait">
+      {status === "success" ? (
+        <motion.div
+          key="success"
+          className="flex flex-col gap-4"
+          initial={{ opacity: 0, y: 16 }}
+          animate={{ opacity: 1, y: 0 }}
+          exit={{ opacity: 0 }}
+          transition={{ duration: 0.5, ease: "easeOut" }}
+        >
+          <span
+            className="font-heading-2"
+            style={{ fontSize: "clamp(22px,2.5vw,32px)", letterSpacing: "-0.02em", fontWeight: 700 }}
+          >
+            Message sent.
+          </span>
+          <p className="text-[14px]" style={{ color: "rgba(249,246,241,0.55)", lineHeight: 1.75 }}>
+            Thanks for reaching out. I&apos;ll get back to you as soon as I can — usually
+            within a day.
+          </p>
+        </motion.div>
+      ) : (
+        <motion.form
+          key="form"
+          onSubmit={handleSubmit}
+          className="flex flex-col gap-6"
+          noValidate
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          exit={{ opacity: 0 }}
+        >
+          {/* Honeypot — hidden from real users, only bots fill it */}
+          <input
+            type="text"
+            name="_hp"
+            aria-hidden="true"
+            tabIndex={-1}
+            autoComplete="off"
+            style={{ display: "none" }}
+            onChange={() => {}}
+          />
+
+          <DarkField label="Your name" error={errors.name}>
+            <input
+              type="text"
+              className={darkInputClass}
+              style={inputStyle}
+              placeholder="Jane Smith"
+              value={form.name}
+              onChange={(e) => handleChange("name", e.target.value)}
+              onFocus={(e) => (e.currentTarget.style.borderColor = "rgb(249,246,241)")}
+              onBlur={(e) => (e.currentTarget.style.borderColor = "rgba(249,246,241,0.2)")}
+              maxLength={120}
+              autoComplete="name"
+            />
+          </DarkField>
+
+          <DarkField label="Your email" error={errors.email}>
+            <input
+              type="email"
+              className={darkInputClass}
+              style={inputStyle}
+              placeholder="jane@company.com"
+              value={form.email}
+              onChange={(e) => handleChange("email", e.target.value)}
+              onFocus={(e) => (e.currentTarget.style.borderColor = "rgb(249,246,241)")}
+              onBlur={(e) => (e.currentTarget.style.borderColor = "rgba(249,246,241,0.2)")}
+              maxLength={254}
+              autoComplete="email"
+            />
+          </DarkField>
+
+          <DarkField label="Message" error={errors.message}>
+            <textarea
+              className={`${darkInputClass} resize-none`}
+              style={inputStyle}
+              placeholder="Tell me about your product, team and role…"
+              rows={4}
+              value={form.message}
+              onChange={(e) => handleChange("message", e.target.value)}
+              onFocus={(e) => (e.currentTarget.style.borderColor = "rgb(249,246,241)")}
+              onBlur={(e) => (e.currentTarget.style.borderColor = "rgba(249,246,241,0.2)")}
+              maxLength={3000}
+            />
+          </DarkField>
+
+          <AnimatePresence>
+            {status === "error" && serverError && (
+              <motion.p
+                className="text-caption font-caption"
+                style={{ color: "rgb(248, 113, 113)" }}
+                initial={{ opacity: 0, y: -4 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0 }}
+              >
+                {serverError}
+              </motion.p>
+            )}
+          </AnimatePresence>
+
+          <CTAButton
+            variant="accent"
+            type="submit"
+            disabled={status === "sending"}
+            className="self-start"
+          >
+            {status === "sending" ? "Sending…" : "Send message ↗"}
+          </CTAButton>
+        </motion.form>
+      )}
+    </AnimatePresence>
   );
 }
 
@@ -183,45 +372,66 @@ const LOGISTICS = [
 /* ─── Page ─────────────────────────────────────────────────────────────────── */
 
 function HireMe() {
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, []);
+
   return (
     <div className="min-h-screen w-full bg-default-background text-default-font">
-      {/* ── Top bar — conversion-focused, email always one click away ── */}
-      <header
-        className="sticky top-0 z-50 backdrop-blur-xl"
-        style={{ background: "rgba(249,246,241,0.75)", borderBottom: "1px solid rgb(224,216,209)" }}
-      >
-        <div className="mx-auto flex max-w-6xl items-center justify-between px-6 py-4">
-          <Link href="/" className="flex flex-col">
-            <span className="font-heading-3 text-[15px] font-bold leading-tight text-default-font">
-              Pablo Parma
+      <NavigationHeader
+        className="z-50"
+        title="Pablo Parma"
+        navigation={
+          <>
+            <Link href="/works">
+              <LinkButton onClick={() => {}}>Work</LinkButton>
+            </Link>
+            <Link href="/ai">
+              <LinkButton onClick={() => {}}>AI Experiments</LinkButton>
+            </Link>
+            <Link href="/cv">
+              <LinkButton onClick={() => {}}>CV</LinkButton>
+            </Link>
+          </>
+        }
+        logoppd={
+          <>
+            <Link href="/">
+              <div className="flex items-center gap-2">
+                <img
+                  className="w-9 flex-none"
+                  src="https://res.cloudinary.com/subframe/image/upload/v1756584504/uploads/20526/c5wl89v9jqmlegnamrmo.svg"
+                  alt="Pablo Parma logo"
+                />
+              </div>
+            </Link>
+            <Link href="/">
+              <div className="flex grow shrink-0 basis-0 flex-col items-start">
+                <span className="text-heading-3 font-heading-3 text-default-font">Pablo Parma</span>
+                <span className="w-full text-caption font-caption text-subtext-color">Product Designer</span>
+              </div>
+            </Link>
+          </>
+        }
+      />
+
+      {/* ── Hero ── */}
+      <section className="mx-auto max-w-6xl px-6 pb-20 pt-[130px] sm:pt-[150px]">
+        <Reveal>
+          <div className="flex flex-wrap items-center gap-2">
+            <span className="text-caption font-caption text-subtext-color uppercase tracking-widest">
+              Open to senior product design roles
             </span>
-            <span className="text-subtext-color" style={MICRO}>
-              Product Designer
+            <span className="text-subtext-color opacity-40">·</span>
+            <span className="text-caption font-caption text-subtext-color uppercase tracking-widest">
+              Remote · GMT-3
             </span>
-          </Link>
-          <div className="flex items-center gap-5">
             <span
-              className="hidden rounded-full px-3 py-1 sm:inline-block"
-              style={{ ...MICRO, color: "rgb(22,163,74)", backgroundColor: "rgba(34,197,94,0.12)" }}
+              className="text-caption font-caption rounded-full px-3 py-0.5"
+              style={{ color: "rgb(22,163,74)", backgroundColor: "rgba(34,197,94,0.12)" }}
             >
               ● Available
             </span>
-            <a href={`mailto:${EMAIL}`}>
-              <CTAButton variant="primary">Email me ↗</CTAButton>
-            </a>
-          </div>
-        </div>
-      </header>
-
-      {/* ── Hero ── */}
-      <section className="mx-auto max-w-6xl px-6 pb-20 pt-16 sm:pt-24">
-        <Reveal>
-          <div className="flex flex-wrap items-center gap-2">
-            <span style={{ ...MICRO, color: "rgba(23,23,23,0.45)" }}>
-              Open to senior product design roles
-            </span>
-            <span style={{ color: "rgba(23,23,23,0.2)" }}>·</span>
-            <span style={{ ...MICRO, color: "rgba(23,23,23,0.45)" }}>Remote · GMT-3</span>
           </div>
         </Reveal>
 
@@ -231,14 +441,14 @@ function HireMe() {
             style={{ fontSize: "clamp(38px,6vw,84px)", lineHeight: 0.96, letterSpacing: "-0.04em", fontWeight: 700 }}
           >
             Senior Product Designer for teams shipping{" "}
-            <span style={{ color: ACCENT }}>AI-era</span> products.
+            <span style={{ color: "var(--color-accent)" }}>AI-era</span> products.
           </h1>
         </Reveal>
 
         <Reveal delay={0.16}>
           <p
-            className="mt-7 max-w-xl text-[15px]"
-            style={{ color: "rgba(23,23,23,0.58)", lineHeight: 1.75 }}
+            className="text-body-big font-body-big text-subtext-color mt-7 max-w-xl"
+            style={{ lineHeight: 1.75 }}
           >
             12+ years designing mobile and web products — from Google C+E Studio to AI
             platforms. I build design systems engineers love, and I prototype with Claude
@@ -248,14 +458,13 @@ function HireMe() {
 
         <Reveal delay={0.24}>
           <div className="mt-9 flex flex-wrap items-center gap-6">
-            <a href={`mailto:${EMAIL}`}>
+            <Link href="/contact">
               <CTAButton variant="accent">Start a conversation ↗</CTAButton>
-            </a>
+            </Link>
             <a
               href={CV_PDF}
               download
-              className="text-[13px] underline underline-offset-4 transition-colors hover:text-black"
-              style={{ color: "rgba(23,23,23,0.55)" }}
+              className="text-caption font-caption text-subtext-color underline underline-offset-4 transition-colors hover:text-default-font"
             >
               Download CV (PDF)
             </a>
@@ -263,8 +472,7 @@ function HireMe() {
               href={LINKEDIN}
               target="_blank"
               rel="noopener noreferrer"
-              className="text-[13px] underline underline-offset-4 transition-colors hover:text-black"
-              style={{ color: "rgba(23,23,23,0.55)" }}
+              className="text-caption font-caption text-subtext-color underline underline-offset-4 transition-colors hover:text-default-font"
             >
               LinkedIn
             </a>
@@ -274,11 +482,8 @@ function HireMe() {
 
       {/* ── Proof strip ── */}
       <section
-        style={{
-          borderTop: "1px solid rgb(224,216,209)",
-          borderBottom: "1px solid rgb(224,216,209)",
-          background: "rgba(23,23,23,0.03)",
-        }}
+        className="border-y border-solid border-neutral-border"
+        style={{ background: "rgba(23,23,23,0.03)" }}
       >
         <div className="mx-auto grid max-w-6xl grid-cols-2 lg:grid-cols-4">
           {STATS.map((s, i) => (
@@ -289,7 +494,7 @@ function HireMe() {
               >
                 {s.value}
               </div>
-              <div className="mt-2" style={{ ...MICRO, color: "rgba(23,23,23,0.45)" }}>
+              <div className="text-caption font-caption text-subtext-color mt-2 uppercase tracking-widest">
                 {s.label}
               </div>
             </Reveal>
@@ -300,18 +505,17 @@ function HireMe() {
       {/* ── What I bring ── */}
       <section className="mx-auto max-w-6xl px-6 pt-20">
         <SectionHeader caption="01 — Capabilities" heading="What I bring to your team" />
-        <div
-          className="grid gap-px sm:grid-cols-2"
-          style={{ background: "rgb(224,216,209)", border: "1px solid rgb(224,216,209)" }}
-        >
+        <div className="grid gap-px border border-solid border-neutral-border bg-neutral-border sm:grid-cols-2">
           {CAPS.map((c, i) => (
             <Reveal key={c.num} delay={i * 0.08} className="h-full">
               <div className="h-full bg-default-background px-7 py-8 transition-colors hover:bg-white/40">
-                <div style={{ ...MICRO, color: "rgba(23,23,23,0.3)" }}>{c.num}</div>
-                <div className="mt-3 text-[13px] font-semibold uppercase tracking-[0.07em]">
+                <div className="text-caption font-caption text-subtext-color uppercase tracking-widest opacity-60">
+                  {c.num}
+                </div>
+                <div className="text-default-font mt-3 text-[13px] font-semibold uppercase tracking-[0.07em]">
                   {c.title}
                 </div>
-                <p className="mt-2 text-[13px]" style={{ color: "rgba(23,23,23,0.5)", lineHeight: 1.65 }}>
+                <p className="text-body font-body text-subtext-color mt-2" style={{ lineHeight: 1.65 }}>
                   {c.desc}
                 </p>
               </div>
@@ -325,9 +529,9 @@ function HireMe() {
         <SectionHeader caption="02 — Recent outcomes" heading="Results, not just screens" />
         <div className="grid gap-4 lg:grid-cols-3">
           {OUTCOMES.map((o, i) => {
-            const bg = o.dark ? "rgb(17,17,17)" : "rgb(228,222,215)";
-            const fg = o.dark ? "rgb(249,246,241)" : "rgb(23,23,23)";
-            const sub = o.dark ? "rgba(249,246,241,0.5)" : "rgb(115,115,115)";
+            const bg = o.dark ? "var(--color-surface-dark)" : "rgb(228,222,215)";
+            const fg = o.dark ? "var(--color-background)" : "var(--color-font)";
+            const sub = o.dark ? "rgba(249,246,241,0.5)" : "var(--color-subtext)";
             return (
               <Reveal key={o.num} delay={i * 0.1} className="h-full">
                 <Link
@@ -335,14 +539,16 @@ function HireMe() {
                   className="group flex h-full flex-col transition-transform duration-300 hover:-translate-y-2"
                 >
                   <svg viewBox="0 0 864 104" width="100%" aria-hidden="true" style={{ display: "block", flexShrink: 0 }}>
-                    <path d={FOLDER_TOP_PATH} fill={bg} />
+                    <path d={FOLDER_TOP_PATH} fill={o.dark ? "rgb(17,17,17)" : "rgb(228,222,215)"} />
                   </svg>
                   <div
                     className="flex grow flex-col gap-5 px-6 pb-7"
                     style={{ background: bg, borderRadius: "0 0 18px 18px", marginTop: "-1px" }}
                   >
                     <div className="flex items-baseline justify-between gap-3">
-                      <span style={{ ...MICRO, color: sub }}>{o.company}</span>
+                      <span className="text-caption font-caption uppercase tracking-widest" style={{ color: sub }}>
+                        {o.company}
+                      </span>
                       <span
                         className="text-[13px] font-medium tabular-nums"
                         style={{ color: o.dark ? "rgba(249,246,241,0.2)" : "rgba(23,23,23,0.18)" }}
@@ -357,12 +563,12 @@ function HireMe() {
                       >
                         {o.title}
                       </span>
-                      <span className="text-[13px]" style={{ color: sub, lineHeight: 1.6 }}>
+                      <span className="text-body font-body" style={{ color: sub, lineHeight: 1.6 }}>
                         {o.result}
                       </span>
                       <span
                         className="mt-1 text-[12px] underline underline-offset-4 opacity-0 transition-opacity group-hover:opacity-100"
-                        style={{ color: o.dark ? "rgb(255,140,80)" : ACCENT }}
+                        style={{ color: o.dark ? "rgb(255,140,80)" : "var(--color-accent)" }}
                       >
                         View case study ↗
                       </span>
@@ -382,12 +588,13 @@ function HireMe() {
           {EXPERIENCE.map((e, i) => (
             <Reveal key={e.company} delay={Math.min(i * 0.05, 0.25)}>
               <div
-                className="grid grid-cols-1 gap-1 py-4 sm:grid-cols-[2fr_2fr_1fr] sm:items-baseline sm:gap-6"
-                style={{ borderTop: i === 0 ? "none" : "1px solid rgb(224,216,209)" }}
+                className={`grid grid-cols-1 gap-1 py-4 sm:grid-cols-[2fr_2fr_1fr] sm:items-baseline sm:gap-6 ${
+                  i > 0 ? "border-t border-solid border-neutral-border" : ""
+                }`}
               >
-                <span className="text-[14px] font-semibold">{e.role}</span>
-                <span className="text-[13px] text-subtext-color">{e.company}</span>
-                <span className="text-[12px] tabular-nums sm:text-right" style={{ color: "rgba(23,23,23,0.4)" }}>
+                <span className="text-default-font text-[14px] font-semibold">{e.role}</span>
+                <span className="text-body font-body text-subtext-color">{e.company}</span>
+                <span className="text-caption font-caption text-subtext-color tabular-nums opacity-70 sm:text-right">
                   {e.period}
                 </span>
               </div>
@@ -402,11 +609,11 @@ function HireMe() {
         <div className="grid gap-x-12 lg:grid-cols-2">
           {LOGISTICS.map((l, i) => (
             <Reveal key={l.k} delay={Math.min(i * 0.06, 0.24)}>
-              <div className="flex gap-6 py-3.5" style={{ borderBottom: "1px solid rgb(224,216,209)" }}>
-                <span className="w-36 shrink-0 pt-0.5" style={{ ...MICRO, color: "rgba(23,23,23,0.4)" }}>
+              <div className="flex gap-6 border-b border-solid border-neutral-border py-3.5">
+                <span className="text-caption font-caption text-subtext-color w-36 shrink-0 pt-0.5 uppercase tracking-widest opacity-80">
                   {l.k}
                 </span>
-                <span className="text-[13px]" style={{ lineHeight: 1.6 }}>
+                <span className="text-body font-body text-default-font" style={{ lineHeight: 1.6 }}>
                   {l.v}
                 </span>
               </div>
@@ -415,60 +622,72 @@ function HireMe() {
         </div>
       </section>
 
-      {/* ── Final CTA ── */}
+      {/* ── Final CTA — dark panel with embedded contact form ── */}
       <section className="mx-auto max-w-6xl px-6 py-24">
         <Reveal>
           <div
             className="px-8 py-14 sm:px-14"
-            style={{ background: "rgb(17,17,17)", borderRadius: "18px", color: "rgb(249,246,241)" }}
+            style={{
+              background: "var(--color-surface-dark)",
+              borderRadius: "18px",
+              color: "rgb(249,246,241)",
+            }}
           >
-            <span style={{ ...MICRO, color: "rgba(249,246,241,0.4)" }}>
-              ● Available now — let&apos;s talk
-            </span>
-            <h2
-              className="font-heading-2 mt-4 max-w-2xl"
-              style={{ fontSize: "clamp(28px,4vw,54px)", lineHeight: 1.02, letterSpacing: "-0.03em", fontWeight: 700 }}
-            >
-              Hiring a product designer?
-            </h2>
-            <p className="mt-5 max-w-lg text-[14px]" style={{ color: "rgba(249,246,241,0.55)", lineHeight: 1.75 }}>
-              Tell me about your product and team. I usually reply within a day — and I&apos;m
-              happy to walk through case studies live.
-            </p>
-            <div className="mt-9 flex flex-wrap items-center gap-6">
-              <a href={`mailto:${EMAIL}`}>
-                <CTAButton variant="accent">Email {EMAIL} ↗</CTAButton>
-              </a>
-              <CopyEmailButton />
-            </div>
-            <div
-              className="mt-10 flex flex-wrap gap-6"
-              style={{ borderTop: "1px solid rgba(249,246,241,0.12)", paddingTop: "1.5rem" }}
-            >
-              <a
-                href={LINKEDIN}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="text-[13px] underline underline-offset-4 transition-colors hover:text-white"
-                style={{ color: "rgba(249,246,241,0.6)" }}
-              >
-                LinkedIn ↗
-              </a>
-              <Link
-                href="/"
-                className="text-[13px] underline underline-offset-4 transition-colors hover:text-white"
-                style={{ color: "rgba(249,246,241,0.6)" }}
-              >
-                Full portfolio ↗
-              </Link>
-              <a
-                href={CV_PDF}
-                download
-                className="text-[13px] underline underline-offset-4 transition-colors hover:text-white"
-                style={{ color: "rgba(249,246,241,0.6)" }}
-              >
-                CV (PDF) ↗
-              </a>
+            <div className="grid gap-12 lg:grid-cols-[5fr_6fr] lg:gap-20">
+              {/* Left — pitch + links */}
+              <div className="flex flex-col">
+                <span
+                  className="text-caption font-caption uppercase tracking-widest"
+                  style={{ color: "rgba(249,246,241,0.4)" }}
+                >
+                  ● Available now — let&apos;s talk
+                </span>
+                <h2
+                  className="font-heading-2 mt-4"
+                  style={{ fontSize: "clamp(28px,4vw,54px)", lineHeight: 1.02, letterSpacing: "-0.03em", fontWeight: 700 }}
+                >
+                  Hiring a product designer?
+                </h2>
+                <p
+                  className="mt-5 max-w-lg text-[14px]"
+                  style={{ color: "rgba(249,246,241,0.55)", lineHeight: 1.75 }}
+                >
+                  Tell me about your product and team. I usually reply within a day — and
+                  I&apos;m happy to walk through case studies live.
+                </p>
+                <div
+                  className="mt-auto flex flex-wrap gap-6 pt-10"
+                  style={{ borderTop: "1px solid rgba(249,246,241,0.12)", marginTop: "2.5rem", paddingTop: "1.5rem" }}
+                >
+                  <a
+                    href={LINKEDIN}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="text-[13px] underline underline-offset-4 transition-colors hover:text-white"
+                    style={{ color: "rgba(249,246,241,0.6)" }}
+                  >
+                    LinkedIn ↗
+                  </a>
+                  <Link
+                    href="/"
+                    className="text-[13px] underline underline-offset-4 transition-colors hover:text-white"
+                    style={{ color: "rgba(249,246,241,0.6)" }}
+                  >
+                    Full portfolio ↗
+                  </Link>
+                  <a
+                    href={CV_PDF}
+                    download
+                    className="text-[13px] underline underline-offset-4 transition-colors hover:text-white"
+                    style={{ color: "rgba(249,246,241,0.6)" }}
+                  >
+                    CV (PDF) ↗
+                  </a>
+                </div>
+              </div>
+
+              {/* Right — form */}
+              <HireContactForm />
             </div>
           </div>
         </Reveal>
